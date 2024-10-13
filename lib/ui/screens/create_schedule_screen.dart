@@ -1,0 +1,140 @@
+import 'package:day_picker/day_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:iot_project/model/device_model.dart';
+
+class CreateScheduleScreen extends StatefulWidget {
+  CreateScheduleScreen(
+      {super.key, required this.keyNumber, required this.device}) ;
+  int keyNumber;
+  Device device;
+
+  @override
+  State<CreateScheduleScreen> createState() => _CreateScheduleScreenState();
+}
+
+class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
+  final List<DayInWeek> _days = [
+    DayInWeek("sat", dayKey: "saturday"),
+    DayInWeek(
+      "sun",
+      dayKey: "sunday",
+    ),
+    DayInWeek("mon", dayKey: "monday"),
+    DayInWeek("tue", dayKey: "tuesday"),
+    DayInWeek("wed", dayKey: "wednesday"),
+    DayInWeek("thu", dayKey: "thursday"),
+    DayInWeek("fri", dayKey: "friday"),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Add Schedule"),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios_rounded)),
+        centerTitle: true,
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Save",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white),
+              ))
+        ],
+      ),
+      body: Column(
+        children: [
+          Tooltip(
+            message:
+                "After choosing the days that you need and selecting the right command the device will be triggred on the right time.",
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                // margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TimePickerSpinner(
+                  alignment: Alignment.center,
+                  isShowSeconds: false,
+                  is24HourMode: false,
+                  normalTextStyle:
+                      TextStyle(fontSize: 24, color: Colors.grey.shade600),
+                  highlightedTextStyle:
+                      const TextStyle(fontSize: 24, color: Colors.black),
+                  spacing: 50,
+                  itemHeight: 80,
+                  itemWidth: 60,
+                  isForce2Digits: true,
+                  onTimeChange: (time) {},
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              elevation: 8,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Select desired days",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    SelectWeekDays(
+                      // key: customWidgetKey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      unSelectedDayTextColor: Colors.black,
+                      days: _days,
+                      border: false,
+                      padding: 16,
+                      width: MediaQuery.of(context).size.width,
+                      boxDecoration: BoxDecoration(
+                        // color: Colors.red,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      onSelect: (values) {
+                        print(values);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Switch ${widget.keyNumber + 1}",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Switch(value: true, onChanged: (value) {})
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
