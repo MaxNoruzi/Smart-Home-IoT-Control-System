@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:iot_project/cubit/timer_schedule_cubit.dart';
+import 'package:iot_project/model/schedule_model.dart';
 import 'package:iot_project/ui/screens/create_schedule_screen.dart';
 
 class TimerScheduleScreen extends StatefulWidget {
@@ -271,7 +272,10 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
                           ),
                         ))
                             .then((value) {
-                          if (value != null) {}
+                          if (value != null) {
+                            _cubit.addSchedule(model: value as ScheduleModel);
+                            // print(value);
+                          }
                         });
                       },
                       child: const Row(

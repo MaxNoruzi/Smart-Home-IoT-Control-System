@@ -111,141 +111,34 @@ class _LightSwitchScreenState extends State<LightSwitchScreen> {
                                   ),
                                 ),
                               ),
-                            )
-
-                            //  _cubit.loadingList.contains(index)
-                            //     ? SpinKitThreeBounce(
-                            //         color: Colors.red.shade300,
-                            //         size: 24,
-                            //       )
-                            //     : Switch(
-                            // value: widget.device.keys[index] == 1
-                            //     ? true
-                            //     : false,
-                            //         onChanged: (value) {
-                            //           // _cubit.changeModule(device:widget.device );
-                            // _cubit.onOffModule(
-                            //     device: widget.device,
-                            //     channel: index + 1,
-                            //     state:
-                            //         widget.device.keys[index] == 1
-                            //             ? false
-                            //             : true
-                            //     //  !widget.switches[index]
-                            //     );
-                            //           // setState(() {
-                            //           //   widget.switches[index] = value; // Update switch state
-                            //           // });
-                            //         },
-                            //         activeColor: Colors.green,
-                            //         inactiveThumbColor: Colors.red,
-                            //       ),
-                            );
-                        //  Card(
-                        //   margin: const EdgeInsets.all(8),
-                        //   child: ListTile(
-                        // title: Text(
-                        //   'Switch ${index}',
-                        //   style: TextStyle(fontSize: 14),
-                        // ),
-                        //     trailing: AbsorbPointer(
-                        //       absorbing: widget.device.keys[index] == -1,
-                        //       child: Opacity(
-                        //           opacity:
-                        //               widget.device.keys[index] == -1 ? 0.3 : 1,
-                        //           child: AnimatedContainer(
-                        //             duration: const Duration(milliseconds: 400),
-                        //             width: 150,
-                        //             height: 200,
-                        //             decoration: BoxDecoration(
-                        //               color: widget.device.keys[index] == 1
-                        //                   ? Colors.blue[200]
-                        //                   : Colors.red[400],
-                        //               borderRadius: BorderRadius.circular(10),
-                        //               boxShadow: [
-                        //                 BoxShadow(
-                        //                   color: Colors.black.withOpacity(0.7),
-                        //                   offset: Offset(
-                        //                       0,
-                        //                       widget.device.keys[index] == 1
-                        //                           ? 2
-                        //                           : 12),
-
-                        //                   // blurStyle: BlurStyle.solid,
-                        //                   blurRadius:
-                        //                       widget.device.keys[index] == 1
-                        //                           ? 1
-                        //                           : 4,
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //             alignment: Alignment.center,
-                        //             child: Text(""),
-                        //           )
-
-                        //           //  _cubit.loadingList.contains(index)
-                        //           //     ? SpinKitThreeBounce(
-                        //           //         color: Colors.red.shade300,
-                        //           //         size: 24,
-                        //           //       )
-                        //           //     : Switch(
-                        //           // value: widget.device.keys[index] == 1
-                        //           //     ? true
-                        //           //     : false,
-                        //           //         onChanged: (value) {
-                        //           //           // _cubit.changeModule(device:widget.device );
-                        //           //           _cubit.onOffModule(
-                        //           //               device: widget.device,
-                        //           //               channel: index + 1,
-                        //           //               state:
-                        //           //                   widget.device.keys[index] == 1
-                        //           //                       ? false
-                        //           //                       : true
-                        //           //               //  !widget.switches[index]
-                        //           //               );
-                        //           //           // setState(() {
-                        //           //           //   widget.switches[index] = value; // Update switch state
-                        //           //           // });
-                        //           //         },
-                        //           //         activeColor: Colors.green,
-                        //           //         inactiveThumbColor: Colors.red,
-                        //           //       ),
-                        //           ),
-                        //     ),
-                        //   ),
-                        // );
+                            ));
                       },
                     ),
                   ),
                 ),
-                // Slider(
-                //   value: widget.device.pwm!.toDouble(),
-                //   onChanged: (value) {
-                //     setState(() {
-                // widget.device.pwm = value.toInt();
-                // _cubit.pwmChange(
-                //     device: widget.device, value: value.toInt());
-                //     });
-                //   },
-                //   divisions: 20,
-                //   min: 0,
-                //   max: 100,
-                // ),
-
-                CartStepperInt(
-                  editKeyboardType: TextInputType.none,
-                  size: 32,
-                  elevation: 12,
-                  value: widget.device.pwm,
-                  stepper: 10,
-                  alwaysExpanded: true,
-                  didChangeCount: (value) {
-                    widget.device.pwm = value.toInt();
-                    _cubit.pwmChange(
-                        device: widget.device, value: value.toInt());
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Brightness :"),
+                      CartStepperInt(
+                        editKeyboardType: TextInputType.none,
+                        size: 32,
+                        elevation: 12,
+                        value: widget.device.pwm,
+                        stepper: 10,
+                        alwaysExpanded: true,
+                        didChangeCount: (value) {
+                          // widget.device.pwm = value.toInt();
+                          _cubit.pwmChange(
+                              device: widget.device, value: value.toInt());
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(

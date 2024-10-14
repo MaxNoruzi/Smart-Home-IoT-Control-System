@@ -8,7 +8,7 @@ class DeviceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8 ,horizontal: 8),
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       elevation: 8,
       child: Material(
         borderRadius: BorderRadius.circular(12),
@@ -19,7 +19,21 @@ class DeviceWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Icon(Icons.key_sharp), Text(device.nodeID)],
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.key_sharp),
+                    Text(
+                      device.keys.first == -1 ? " Offilne" : " Online",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: device.keys.first == -1
+                              ? Colors.red
+                              : Colors.green),
+                    )
+                  ],
+                ),
+                Text(device.nodeID)
+              ],
             ),
           ),
         ),

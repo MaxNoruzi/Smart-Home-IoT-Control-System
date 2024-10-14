@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:iot_project/model/wifi_config.dart';
 import 'package:iot_project/ui/widgets/custom_loading_widget.dart';
 import 'package:iot_project/utils/appApi.dart';
@@ -29,6 +30,7 @@ class _ScannerState extends State<Scanner> {
   @override
   void initState() {
     super.initState();
+    _getScannedResults(context);
   }
 
   bool get isStreaming => subscription != null;
@@ -117,9 +119,15 @@ class _ScannerState extends State<Scanner> {
           case CanGetScannedResults.noLocationServiceDisabled:
             _showWarningDialog(
                 context: context,
-                onButtonPressed: () {},
+                onButtonPressed: () async {
+                  await Geolocator.openLocationSettings();
+                  // Navigator.of(context).pop();
+                  // setState(() {
+                  //   isLoading = false;
+                  // });
+                },
                 warningMessage: "Please turn on your location.",
-                textMessage: "done.");
+                textMessage: "Settings.");
             break;
           default:
             _showWarningDialog(
@@ -133,9 +141,9 @@ class _ScannerState extends State<Scanner> {
                 textMessage: "Open settings");
         }
 
-        if (context.mounted) {
-          Utils.kShowSnackBar(context, "Cannot get scanned results: $can");
-        }
+        // if (context.mounted) {
+        //   Utils.kShowSnackBar(context, "Cannot get scanned results: $can");
+        // }
         accessPoints = <WiFiAccessPoint>[];
         return false;
       }

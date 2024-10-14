@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:day_picker/day_picker.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:iot_project/cubit/timer_schedule_cubit.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/schedule_model.dart';
 
@@ -41,6 +43,7 @@ class CreateScheduleScreen extends StatefulWidget {
 }
 
 class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +58,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         actions: [
           TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(widget.model);
               },
               child: Text(
                 "Save",
@@ -128,7 +131,11 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                       onSelect: (values) {
                         log(values.toString());
                         widget.model.weekDays.clear();
-                        widget.model.weekDays.addAll(values);
+                        // List<DayInWeek> sample = widget._days.where(
+                        //     (element) => values.contains(element.dayKey)).toList();
+                        widget.model.weekDays.addAll(widget._days
+                            .where((element) => values.contains(element.dayKey))
+                            .map((e) => widget._days.indexOf(e)));
                       },
                     ),
                     Padding(
@@ -144,7 +151,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                           Switch(
                               value: widget.model.state,
                               onChanged: (value) {
-                                widget.model.state = value;
+                                setState(() {
+                                  widget.model.state = value;
+                                });
                               })
                         ],
                       ),
