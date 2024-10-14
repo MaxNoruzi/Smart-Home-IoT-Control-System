@@ -1,20 +1,29 @@
+import 'dart:developer';
+
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:iot_project/model/device_model.dart';
+import 'package:iot_project/model/schedule_model.dart';
 
 class CreateScheduleScreen extends StatefulWidget {
-  CreateScheduleScreen(
-      {super.key, required this.keyNumber, required this.device}) ;
+  CreateScheduleScreen({
+    super.key,
+    required this.keyNumber,
+    required this.device,
+    ScheduleModel? newModel,
+  }) {
+    model = ScheduleModel.fromJson(newModel?.toJson() ?? {});
+    for (var i = 0; i < _days.length; i++) {
+      if (model.weekDays.contains(_days[i].dayKey)) {
+        _days[i].isSelected = true;
+      }
+    }
+  }
   int keyNumber;
   Device device;
-
-  @override
-  State<CreateScheduleScreen> createState() => _CreateScheduleScreenState();
-}
-
-class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
+  late ScheduleModel model;
   final List<DayInWeek> _days = [
     DayInWeek("sat", dayKey: "saturday"),
     DayInWeek(
@@ -27,7 +36,11 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     DayInWeek("thu", dayKey: "thursday"),
     DayInWeek("fri", dayKey: "friday"),
   ];
+  @override
+  State<CreateScheduleScreen> createState() => _CreateScheduleScreenState();
+}
 
+class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +90,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                   itemHeight: 80,
                   itemWidth: 60,
                   isForce2Digits: true,
-                  onTimeChange: (time) {},
+                  onTimeChange: (time) {
+                    widget.model.time = time;
+                  },
                 ),
               ),
             ),
@@ -102,7 +117,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       unSelectedDayTextColor: Colors.black,
-                      days: _days,
+                      days: widget._days,
                       border: false,
                       padding: 16,
                       width: MediaQuery.of(context).size.width,
@@ -111,7 +126,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       onSelect: (values) {
-                        print(values);
+                        log(values.toString());
+                        widget.model.weekDays.clear();
+                        widget.model.weekDays.addAll(values);
                       },
                     ),
                     Padding(
@@ -124,7 +141,11 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                             "Switch ${widget.keyNumber + 1}",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          Switch(value: true, onChanged: (value) {})
+                          Switch(
+                              value: widget.model.state,
+                              onChanged: (value) {
+                                widget.model.state = value;
+                              })
                         ],
                       ),
                     )

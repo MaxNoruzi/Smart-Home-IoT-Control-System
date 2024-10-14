@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/receive_model.dart';
+import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Utils {
@@ -16,6 +17,8 @@ class Utils {
   static late Box infoBox;
   static late String username;
   static late String password;
+  static late MqttService client;
+  static late String topic ;
   static void confrimLogin({required String user, required String pass}) {
     username = user;
     password = pass;

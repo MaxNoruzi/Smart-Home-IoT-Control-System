@@ -1,12 +1,9 @@
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iot_project/cubit/device_control_cubit.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/ui/screens/switch_pick.dart';
-import 'package:iot_project/ui/widgets/animated_switch.dart';
 // import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class LightSwitchScreen extends StatefulWidget {
@@ -260,8 +257,10 @@ class _LightSwitchScreenState extends State<LightSwitchScreen> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () =>
                                 Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  SwitchPick(device: widget.device),
+                              builder: (context) => SwitchPick(
+                                device: widget.device,
+                                client: _cubit.client,
+                              ),
                             )),
                             child: Ink(
                               decoration: ShapeDecoration(

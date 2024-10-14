@@ -1,14 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/cubit/timer_schedule_cubit.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/ui/screens/timer_schedule_screen.dart';
+import 'package:iot_project/utils/mqtt_client.dart';
 
 class SwitchPick extends StatefulWidget {
-  SwitchPick({super.key, required this.device});
+  SwitchPick({super.key, required this.device, required this.client});
   Device device;
+  MqttService client;
   @override
   State<SwitchPick> createState() => _SwitchPickState();
 }
@@ -36,15 +37,19 @@ class _SwitchPickState extends State<SwitchPick> {
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlocProvider(
                         create: (context) => TimerScheduleCubit(
-                            device: widget.device, keyNumber: index),
+                            client: widget.client,
+                            device: widget.device,
+                            keyNumber: index),
                         child: TimerScheduleScreen(),
                       ),
                     )),
                     child: Ink(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-
-                          boxShadow: [BoxShadow(color: Colors.grey.shade100,spreadRadius: 4)]),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade100, spreadRadius: 4)
+                          ]),
                       // margin: EdgeInsets.zero,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

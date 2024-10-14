@@ -52,6 +52,7 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   circular_countdown_timer: ^0.2.3
   cart_stepper: ^4.3.0
+  meta: ^1.11.0
 
 
 dev_dependencies:
