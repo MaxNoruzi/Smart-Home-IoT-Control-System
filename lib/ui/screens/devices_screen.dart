@@ -68,20 +68,24 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               (index) => DeviceWidget(
                                     device: Utils.deviceList[index],
                                     onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) => BlocProvider(
-                                          create: (context) =>
-                                              control.DeviceControlCubit(
-                                                  client: _cubit.client,
-                                                  device:
-                                                      Utils.deviceList[index],
-                                                  topic:
-                                                      "users/${Utils.username}"),
-                                          child: LightSwitchScreen(
-                                              device: Utils.deviceList[index]),
-                                        ),
-                                      ));
+                                      if (Utils.deviceList[index].keys.first !=
+                                          -1) {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => BlocProvider(
+                                            create: (context) =>
+                                                control.DeviceControlCubit(
+                                                    client: _cubit.client,
+                                                    device:
+                                                        Utils.deviceList[index],
+                                                    topic:
+                                                        "users/${Utils.username}"),
+                                            child: LightSwitchScreen(
+                                                device:
+                                                    Utils.deviceList[index]),
+                                          ),
+                                        ));
+                                      }
 
                                       // _cubit.changeModule(
                                       //   device: Utils.deviceList[index])

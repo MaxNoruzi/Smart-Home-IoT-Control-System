@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/devices_screen.dart';
+import 'package:iot_project/ui/screens/scene_screen.dart';
+import 'package:iot_project/utils/mqtt_client.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -14,12 +16,22 @@ class HomePageScreen extends StatefulWidget {
 class _MyHomePageState extends State<HomePageScreen> {
   /// Controller to handle PageView and also handles initial page
   final _pageController = PageController(initialPage: 0);
+  late final MqttService client;
 
   /// Controller to handle bottom nav bar and also handles initial page
   final NotchBottomBarController _controller =
       NotchBottomBarController(index: 0);
 
   int maxCount = 5;
+  @override
+  void initState() {
+    client = MqttService(
+        broker: "212.23.201.244",
+        clientId: "sadasdas",
+        onConnected: () {},
+        onDisconnected: () {});
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -33,12 +45,10 @@ class _MyHomePageState extends State<HomePageScreen> {
     /// widget list
     List<Widget> bottomBarPages = [
       BlocProvider(
-        create: (context) => DevicesScreenCubit(),
+        create: (context) => DevicesScreenCubit(client: client),
         child: DevicesScreen(),
       ),
-      const Scaffold(
-        backgroundColor: Colors.red,
-      ),
+      const SceneScreen(),
       const Scaffold(
         backgroundColor: Colors.yellow,
       ),

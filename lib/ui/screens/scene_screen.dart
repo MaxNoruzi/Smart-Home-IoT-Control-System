@@ -10,6 +10,19 @@ class SceneScreen extends StatefulWidget {
 class _SceneScreenState extends State<SceneScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Scene"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.add_circle_rounded,
+                size: 32,
+              ))
+        ],
+      ),
+    );
   }
 }

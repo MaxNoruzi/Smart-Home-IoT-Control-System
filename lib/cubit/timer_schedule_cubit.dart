@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
@@ -44,15 +46,16 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
           model.weekDays[i].toString() +
           ((i < model.weekDays.length - 1) ? "," : "");
     }
+    log(model.toJson().toString());
     client.publish(Utils.topic, '''
     {
     "Type": "U-Sch",
     "NodeID": "${device.nodeID}",
     "Token": "${device.token}",
-    "Schedule": "($ScheduleTxt)-11-18-22",
+    "Schedule": "($ScheduleTxt)-${model.time.toUtc().hour}-${model.time.toUtc().minute}",
     "SchedID": $SchedID,
     "Action": {
-        "Key": "K${keyNumber}_${model.isActive ? 1 : 0}"
+        "Key": "K${keyNumber}_${model.state ? 1 : 0}"
     }
     }''');
   }

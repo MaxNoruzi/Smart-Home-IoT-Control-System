@@ -10,20 +10,23 @@ import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/utils/consts.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
+import 'package:meta/meta.dart';
 
 part 'devices_screen_state.dart';
 
 class DevicesScreenCubit extends Cubit<DevicesScreenState> {
-  DevicesScreenCubit() : super(Loading()) {
-    client = MqttService(
-        broker: "212.23.201.244",
-        clientId: "sadasdas",
-        onConnected: onConnected,
-        onDisconnected: onDisconnected);
-
+  DevicesScreenCubit({required this.client}) : super(Loading()) {
+    // client = MqttService(
+    //     broker: "212.23.201.244",
+    //     clientId: "sadasdas",
+    //     onConnected: onConnected,
+    //     onDisconnected: onDisconnected);
+    client.setOnConnected(onConnected);
+    client.setOnDisconnected(onDisconnected);
     fetchDevices();
   }
   late final MqttService client;
+  bool onceRefreshed = false;
   @override
   void emit(DevicesScreenState state) {
     if (!isClosed) super.emit(state);
@@ -58,7 +61,6 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
         case EventType.ackKey:
           break;
         case EventType.ackPwm:
-        
           break;
         case EventType.event:
           break;
@@ -86,10 +88,13 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   }
 
   void onConnected() {
-    emit(ScaffoldError(message: "دوباره متصل شدید."));
+    onceRefreshed = false;
+    if (kDebugMode) log("دوباره متصل شدید.");
+    // emit(ScaffoldError(message: "دوباره متصل شدید."));
   }
 
-  void onDisconnected() {
+  void onDisconnected() async {
+    if (kDebugMode) log("Disconnected");
     emit(Error(
         error: ErrorModel(
             title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
@@ -97,6 +102,22 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
         onCall: () {
           fetchDevices();
         }));
+    // if (!onceRefreshed) {
+    //   Timer(Duration(milliseconds: 1000), () {
+    //     if (!client.isConnected() && !isClosed) {
+    //       onceRefreshed = true;
+    //       client.connect();
+    //     }
+    //   });
+    // } else {
+    //   emit(Error(
+    //       error: ErrorModel(
+    //           title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
+    //           errorStatus: ErrorStatus.connection),
+    //       onCall: () {
+    //         fetchDevices();
+    //       }));
+    // }
   }
 
   void fetchStatus({String? topic}) {
