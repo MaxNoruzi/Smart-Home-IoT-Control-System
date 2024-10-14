@@ -28,6 +28,7 @@ void main() async {
     if (Utils.infoBox.get("loggedIn") ?? false) {
       Utils.username = Utils.infoBox.get("username");
       Utils.password = Utils.infoBox.get("password");
+      Utils.topic = "users/" + Utils.username;
       // Utils.lastLoginDate = DateTime.parse(Utils.infoBox.get("lastLoginDate"));
     }
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {};
@@ -110,7 +111,9 @@ class MyApp extends StatelessWidget {
           color: Colors.black, // Icon color (black)
         ),
       ),
-      home: Utils.infoBox.get("loggedIn")??false ? HomePageScreen() : LoginScreen(),
+      home: Utils.infoBox.get("loggedIn") ?? false
+          ? HomePageScreen()
+          : LoginScreen(),
       // home: Scanner(),
     );
   }

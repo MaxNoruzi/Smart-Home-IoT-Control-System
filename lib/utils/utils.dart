@@ -18,10 +18,11 @@ class Utils {
   static late String username;
   static late String password;
   static late MqttService client;
-  static late String topic ;
+  static late String topic;
   static void confrimLogin({required String user, required String pass}) {
     username = user;
     password = pass;
+    topic = "users/" + username;
     Utils.infoBox.put("loggedIn", true);
     Utils.infoBox.put("username", user);
     Utils.infoBox.put("password", pass);

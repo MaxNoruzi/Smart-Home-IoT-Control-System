@@ -47,16 +47,18 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
     fetchStatus();
   }
 
-  void onListen(ListenModel model) async {
-    BaseEvent event;
-    event = await compute(
-        (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
+  // void onListen(ListenModel model) async {
+  void onListen(BaseEvent event) async {
+    // BaseEvent event;
+    // event = await compute(
+    //     (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
     try {
-      event = BaseEvent.fromJson(jsonDecode(model.input));
+      // event = BaseEvent.fromJson(jsonDecode(model.input));
       switch (event.eventType) {
         case EventType.ackKey:
           break;
         case EventType.ackPwm:
+        
           break;
         case EventType.event:
           break;
@@ -67,6 +69,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
               nodeID: (event as NodeKeysUpdate).nodeId,
               keys: (event).keys,
               pwm: (event).pwm);
+          emit(Empty());
           break;
         default:
       }
@@ -75,7 +78,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
       if (!e.toString().contains("Sample")) log(e.toString());
     }
 
-    log(model.input);
+    // log(model.input);
   }
 
   void subscribeToTopic({String? topic}) {

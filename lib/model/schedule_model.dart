@@ -1,6 +1,6 @@
 class ScheduleModel {
   String nodeID;
-  List<String> weekDays;
+  List<int> weekDays;
   int switchNumber;
   bool isActive;
   bool state;
@@ -18,7 +18,7 @@ class ScheduleModel {
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
       nodeID: json['nodeID'] ?? '',
-      weekDays: List<String>.from(
+      weekDays: List<int>.from(
           json['WeekDays'] ?? []), // Proper type casting for weekDays
       switchNumber: json['SwitchNumber'] ?? 0,
       isActive: json['IsActive'] ?? false,

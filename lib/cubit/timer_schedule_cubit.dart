@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
+import 'package:iot_project/model/schedule_model.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:meta/meta.dart';
@@ -33,21 +34,26 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     emit(Empty());
   }
 
-  void pwmChange({
-    required Device device,
-    required int value,
-  }) {
+  void addSchedule({required ScheduleModel model}) {
+    int SchedID = (model.time.hour * 3600) * (model.time.minute * 60) +
+        (model.weekDays
+            .fold(0, (previousValue, element) => previousValue + element));
+    String ScheduleTxt = "";
+    for (var i = 0; i < model.weekDays.length; i++) {
+      ScheduleTxt = ScheduleTxt +
+          model.weekDays[i].toString() +
+          ((i < model.weekDays.length - 1) ? "," : "");
+    }
     client.publish(Utils.topic, '''
     {
     "Type": "U-Sch",
     "NodeID": "${device.nodeID}",
     "Token": "${device.token}",
-    "Schedule": "FR-11-18-22",
-    "SchedID": 1265,
-    "Event": {
-        "Type": "PWM",
-        "PWM": $value
-        }
+    "Schedule": "($ScheduleTxt)-11-18-22",
+    "SchedID": $SchedID,
+    "Action": {
+        "Key": "K${keyNumber}_${model.isActive ? 1 : 0}"
+    }
     }''');
   }
 //   {

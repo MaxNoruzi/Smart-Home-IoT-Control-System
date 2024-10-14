@@ -24,11 +24,12 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
   late MqttService client;
   Set<int> loadingList = {};
   String topic; // "users/" + Utils.username
-  void onListen(ListenModel model) async {
-    BaseEvent event;
+  // void onListen(ListenModel model) async {
+  void onListen(BaseEvent event) async {
+    // BaseEvent event;
     try {
-      event = await compute(
-          (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
+      // event = await compute(
+      //     (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
 
       // BaseEvent.fromJson(jsonDecode(model.input));
       switch (event.eventType) {
@@ -41,7 +42,10 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
           }
           break;
         case EventType.ackPwm:
-          if ((event as AckResponse).nodeId == device.nodeID) {}
+          if ((event as AckResponse).nodeId == device.nodeID) {
+            device.pwm = event.ack.pwm;
+            emit(Empty());
+          }
           break;
         case EventType.event:
           break;
@@ -50,8 +54,8 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
         case EventType.uu:
           Utils.updateDevice(
               nodeID: (event as NodeKeysUpdate).nodeId,
-              keys: (event as NodeKeysUpdate).keys,
-              pwm: (event as NodeKeysUpdate).pwm);
+              keys: (event).keys,
+              pwm: (event).pwm);
           emit(Empty());
           break;
         default:
@@ -61,7 +65,7 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
       if (!e.toString().contains("Sample")) log(e.toString());
     }
 
-    log(model.input);
+    // log(model.input);
   }
 
   void pwmChange({
