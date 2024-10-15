@@ -150,5 +150,41 @@
     "no_change": "No Change",
     "@no_change": {
         "description": "Indicates that there will be no change to the device's state."
+    },
+    "info": "Info",
+    "@info": {
+        "description": "Displays general information about the user and app settings."
+    },
+    "username_label": "User Name",
+    "@username_label": {
+        "description": "Shows the name of the current user."
+    },
+    "change_language": "Change Language",
+    "@change_language": {
+        "description": "Allows the user to change the app's language."
+    },
+    "logout": "Logout",
+    "@logout": {
+        "description": "Logs the user out of the application."
+    },
+    "cannot_get_scanned_results": "Cannot get scanned results",
+    "@cannot_get_scanned_results": {
+        "description": "Message displayed when the app is unable to retrieve WiFi scanned results."
+    },
+    "turn_on_location": "Please turn on your location.",
+    "@turn_on_location": {
+        "description": "Warning message displayed when the location service is disabled."
+    },
+    "open_settings": "Open settings",
+    "@open_settings": {
+        "description": "Button text prompting users to open device settings for granting location access."
+    },
+    "grant_location_access": "Please grant Location access to the application.",
+    "@grant_location_access": {
+        "description": "Message displayed when the app needs location permission."
+    },
+    "settings": "Settings",
+    "@settings": {
+        "description": "Label for opening device settings."
     }
 }

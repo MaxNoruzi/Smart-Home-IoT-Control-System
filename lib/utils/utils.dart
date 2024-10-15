@@ -116,6 +116,13 @@ FkkwOvXaJwR8
   //       return ReceiveTypes.SAMPLE;
   //   }
   // }
+  static void logout({required BuildContext context}) async {
+    // Utils.isLoggedIn = false;
+    // await Utils.infoBox.put("loginInfo", false);
+    await Utils.infoBox.put("loggedIn", false);
+    if (context.mounted) Navigator.of(context).pushReplacementNamed("/login");
+  }
+
   static void updateDevice(
       {required String nodeID, required String keys, required int pwm}) {
     if (deviceList.where((element) => element.nodeID == nodeID).length > 0) {

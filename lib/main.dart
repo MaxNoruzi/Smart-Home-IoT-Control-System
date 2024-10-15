@@ -122,6 +122,13 @@ class MyApp extends StatelessWidget {
           color: Colors.black, // Icon color (black)
         ),
       ),
+      routes: {
+        '/home': (context) => BlocProvider(
+              create: (context) => DevicesScreenCubit(),
+              child: HomePageScreen(),
+            ),
+        '/login': (context) => LoginScreen(),
+      },
       home: Utils.infoBox.get("loggedIn") ?? false
           ? BlocProvider(
               create: (context) => DevicesScreenCubit(),

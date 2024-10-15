@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/devices_screen.dart';
 import 'package:iot_project/ui/screens/scene_screen.dart';
+import 'package:iot_project/ui/screens/user_info_screen.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -46,9 +47,7 @@ class _MyHomePageState extends State<HomePageScreen> {
     List<Widget> bottomBarPages = [
       DevicesScreen(),
       const SceneScreen(),
-      const Scaffold(
-        backgroundColor: Colors.yellow,
-      ),
+      InfoScreen(),
     ];
     return Scaffold(
       body: PageView(
