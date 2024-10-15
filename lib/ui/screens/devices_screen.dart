@@ -9,6 +9,7 @@ import 'package:iot_project/ui/widgets/custom_loading_widget.dart';
 import 'package:iot_project/ui/widgets/custom_error.dart';
 import 'package:iot_project/ui/widgets/device_widget.dart';
 import 'package:iot_project/utils/utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DevicesScreen extends StatefulWidget {
   const DevicesScreen({super.key});

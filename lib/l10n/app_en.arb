@@ -1,0 +1,8 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+        "description": "The conventional newborn programmer greeting"
+    },
+    "allDevices": "لیست دستگاه ها",
+    "@allDevices": {}
+}

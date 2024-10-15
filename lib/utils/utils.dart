@@ -7,13 +7,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:iot_project/model/device_model.dart';
-import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Utils {
   Utils._();
-  static late List<Device> deviceList;
+  static List<Device> deviceList = [];
   static late Box infoBox;
   static late String username;
   static late String password;

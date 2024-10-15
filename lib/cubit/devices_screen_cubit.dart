@@ -15,14 +15,14 @@ import 'package:meta/meta.dart';
 part 'devices_screen_state.dart';
 
 class DevicesScreenCubit extends Cubit<DevicesScreenState> {
-  DevicesScreenCubit({required this.client}) : super(Loading()) {
-    // client = MqttService(
-    //     broker: "212.23.201.244",
-    //     clientId: "sadasdas",
-    //     onConnected: onConnected,
-    //     onDisconnected: onDisconnected);
-    client.setOnConnected(onConnected);
-    client.setOnDisconnected(onDisconnected);
+  DevicesScreenCubit() : super(Loading()) {
+    client = MqttService(
+        broker: "212.23.201.244",
+        clientId: "sadasdas",
+        onConnected: onConnected,
+        onDisconnected: onDisconnected);
+    // client.setOnConnected(onConnected);
+    // client.setOnDisconnected(onDisconnected);
     fetchDevices();
   }
   late final MqttService client;
@@ -95,29 +95,29 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
 
   void onDisconnected() async {
     if (kDebugMode) log("Disconnected");
-    emit(Error(
-        error: ErrorModel(
-            title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
-            errorStatus: ErrorStatus.connection),
-        onCall: () {
-          fetchDevices();
-        }));
-    // if (!onceRefreshed) {
-    //   Timer(Duration(milliseconds: 1000), () {
-    //     if (!client.isConnected() && !isClosed) {
-    //       onceRefreshed = true;
-    //       client.connect();
-    //     }
-    //   });
-    // } else {
-    //   emit(Error(
-    //       error: ErrorModel(
-    //           title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
-    //           errorStatus: ErrorStatus.connection),
-    //       onCall: () {
-    //         fetchDevices();
-    //       }));
-    // }
+    // emit(Error(
+    //     error: ErrorModel(
+    //         title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
+    //         errorStatus: ErrorStatus.connection),
+    //     onCall: () {
+    //       fetchDevices();
+    //     }));
+    if (!onceRefreshed) {
+      Timer(Duration(milliseconds: 100), () {
+        if (!client.isConnected() && !isClosed) {
+          onceRefreshed = true;
+          client.connect();
+        }
+      });
+    } else {
+      emit(Error(
+          error: ErrorModel(
+              title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
+              errorStatus: ErrorStatus.connection),
+          onCall: () {
+            fetchDevices();
+          }));
+    }
   }
 
   void fetchStatus({String? topic}) {
@@ -132,7 +132,6 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
       final client = await Utils.createHttpClientWithCertificate();
       // Timer(Duration(seconds: 10), () {
       //   client.close(); // Close the client if needed
-
       //   emit(Error(
       //       error: ErrorModel(
       //           title: "اتفاقی غیر منتظره رخ داده است .",
@@ -142,7 +141,6 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
       //       }));
       //   return;
       // });
-
       final response = await client.post(
         Uri.parse("$baseApiUrl/api/login/"),
         body: jsonEncode(

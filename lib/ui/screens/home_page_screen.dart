@@ -44,10 +44,7 @@ class _MyHomePageState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     /// widget list
     List<Widget> bottomBarPages = [
-      BlocProvider(
-        create: (context) => DevicesScreenCubit(client: client),
-        child: DevicesScreen(),
-      ),
+      DevicesScreen(),
       const SceneScreen(),
       const Scaffold(
         backgroundColor: Colors.yellow,

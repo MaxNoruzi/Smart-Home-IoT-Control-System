@@ -22,7 +22,11 @@ class DeviceWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.key_sharp),
+                    Image.asset(
+                      "assets/images/key_${device.channel}.png",
+                      height: 40,width: 40,
+                      fit: BoxFit.fill,
+                    ),
                     Text(
                       device.keys.first == -1 ? " Offilne" : " Online",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(

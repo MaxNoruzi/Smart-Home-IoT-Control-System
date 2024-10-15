@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/ui/screens/home_page_screen.dart';
 import 'package:iot_project/utils/consts.dart';
@@ -54,7 +56,7 @@ class LoginScreen extends StatelessWidget {
         headers: {"Content-Type": "application/json"},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         List<Device> deviceList = List<Device>.from(
             (jsonDecode(response.body)['data']["devices_list"])
                 .map((e) => Device.fromJson(e))).toList();
@@ -84,7 +86,7 @@ class LoginScreen extends StatelessWidget {
         body: jsonEncode({"email": data.name, "password": data.password}),
         headers: {"Content-Type": "application/json"},
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return null;
       } else {
         if (response.body != "" &&
@@ -113,7 +115,7 @@ class LoginScreen extends StatelessWidget {
         headers: {"Content-Type": "application/json"},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         Map<String, dynamic> decodedToken = jsonDecode(response.body)['result'];
         return null;
       } else {
@@ -164,7 +166,7 @@ class LoginScreen extends StatelessWidget {
         headers: {"Content-Type": "application/json"},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         Map<String, dynamic> decodedToken = jsonDecode(response.body)['result'];
         return null;
       } else {
@@ -197,7 +199,10 @@ class LoginScreen extends StatelessWidget {
       logoTag: "assets/images/logo.jpg",
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const HomePageScreen(),
+          builder: (context) => BlocProvider(
+            create: (context) => DevicesScreenCubit(),
+            child: const HomePageScreen(),
+          ),
         ));
       },
     );

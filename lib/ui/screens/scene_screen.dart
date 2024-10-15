@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iot_project/ui/screens/add_scene_screen.dart';
 
 class SceneScreen extends StatefulWidget {
   const SceneScreen({super.key});
@@ -16,7 +18,11 @@ class _SceneScreenState extends State<SceneScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => AddSceneScreen(),
+                ));
+              },
               icon: const Icon(
                 Icons.add_circle_rounded,
                 size: 32,

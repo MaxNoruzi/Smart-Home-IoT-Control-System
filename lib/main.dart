@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iot_project/ui/screens/add_device_screen.dart';
+import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/home_page_screen.dart';
 import 'package:iot_project/ui/screens/login_screen.dart';
-import 'package:iot_project/ui/screens/test_screen.dart';
 import 'package:iot_project/utils/utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   var deviceData = <String, dynamic>{};
@@ -47,7 +48,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Solana',
-
+      localizationsDelegates: const [
+        AppLocalizations.delegate, // Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: const Locale('en'),
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('fa'), // Spanish
+      ],
       theme: ThemeData(
         colorScheme: const ColorScheme(
           brightness: Brightness.light,
@@ -112,7 +123,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: Utils.infoBox.get("loggedIn") ?? false
-          ? HomePageScreen()
+          ? BlocProvider(
+              create: (context) => DevicesScreenCubit(),
+              child: HomePageScreen(),
+            )
           : LoginScreen(),
       // home: Scanner(),
     );
