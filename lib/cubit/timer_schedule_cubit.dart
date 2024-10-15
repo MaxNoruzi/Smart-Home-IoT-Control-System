@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
+import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/model/schedule_model.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
@@ -13,7 +14,9 @@ part 'timer_schedule_state.dart';
 class TimerScheduleCubit extends Cubit<TimerScheduleState> {
   TimerScheduleCubit(
       {required this.device, required this.keyNumber, required this.client})
-      : super(TimerScheduleInitial());
+      : super(TimerScheduleInitial()) {
+    client.addFunction(onListen);
+  }
 
   Device device;
   int keyNumber;
@@ -26,6 +29,7 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     if (!isClosed) super.emit(state);
   }
 
+  void onListen(BaseEvent event) {}
   void startTimer() {
     timerStarted = true;
     emit(Empty());

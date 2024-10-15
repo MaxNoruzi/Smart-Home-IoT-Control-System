@@ -3,9 +3,7 @@ import 'dart:developer';
 import 'package:day_picker/day_picker.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
-import 'package:iot_project/cubit/timer_schedule_cubit.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/schedule_model.dart';
 
@@ -43,7 +41,6 @@ class CreateScheduleScreen extends StatefulWidget {
 }
 
 class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
