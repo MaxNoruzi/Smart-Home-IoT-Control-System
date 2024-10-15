@@ -1,8 +1,154 @@
 {
-    "helloWorld": "Hello World!",
-    "@helloWorld": {
-        "description": "The conventional newborn programmer greeting"
+    "warning": "Warning",
+    "@warning": {
+        "description": "Title for warning dialog"
     },
-    "allDevices": "لیست دستگاه ها",
-    "@allDevices": {}
+    "noValidDevices": "No valid devices found, please use the get button.",
+    "@noValidDevices": {
+        "description": "Message displayed when no valid devices are found"
+    },
+    "wifiOff": "Your WiFi is off, please turn it on.",
+    "@wifiOff": {
+        "description": "Warning message when WiFi is disabled"
+    },
+    "turnOnWifi": "Turn on Wifi",
+    "@turnOnWifi": {
+        "description": "Button text to turn on WiFi"
+    },
+    "noScannedResults": "NO SCANNED RESULTS",
+    "@noScannedResults": {
+        "description": "Message displayed when there are no scanned results"
+    },
+    "editWifiSettings": "Edit WiFi Settings",
+    "@editWifiSettings": {
+        "description": "Title for editing WiFi settings"
+    },
+    "wifiSsid": "WiFi SSID",
+    "@wifiSsid": {
+        "description": "Label for WiFi SSID input field"
+    },
+    "wifiPassword": "WiFi Password",
+    "@wifiPassword": {
+        "description": "Label for WiFi password input field"
+    },
+    "username": "Username",
+    "@username": {
+        "description": "Label for username input field"
+    },
+    "userPassword": "User Password",
+    "@userPassword": {
+        "description": "Label for user password input field"
+    },
+    "confirm": "Confirm",
+    "@confirm": {
+        "description": "Button text to confirm the WiFi settings"
+    },
+    "connected": "Connected to ",
+    "@connected": {
+        "description": "Message displayed when successfully connected to a WiFi network"
+    },
+    "failedToConnect": "Failed to connect to",
+    "@failedToConnect": {
+        "description": "Message displayed when connection to a WiFi network fails"
+    },
+    "somethingWentWrong": "Something went wrong, please try again.",
+    "@somethingWentWrong": {
+        "description": "Generic error message"
+    },
+    "createScene": "Create Scene",
+    "@createScene": {
+        "description": "Title for the screen where a new scene can be created"
+    },
+    "sceneName": "Scene Name",
+    "@sceneName": {
+        "description": "Label for the scene name input field"
+    },
+    "saveScene": "Save Scene",
+    "@saveScene": {
+        "description": "Button text to save the created scene"
+    },
+    "addSchedule": "Add Schedule",
+    "@addSchedule": {
+        "description": "Title for the screen where a new schedule can be created"
+    },
+    "save": "Save",
+    "@save": {
+        "description": "Button text to save the created schedule"
+    },
+    "selectDesiredDays": "Select desired days",
+    "@selectDesiredDays": {
+        "description": "Label for selecting the days of the week"
+    },
+    "switchh": "Switch",
+    "@switchh": {
+        "description": "Label for the switch associated with the selected device, where {number} will be replaced with the switch number"
+    },
+    "tooltipMessage": "After choosing the days that you need and selecting the right command the device will be triggred on the right time.",
+    "@tooltipMessage": {
+        "description": "Tooltip message explaining the function of selecting days and commands"
+    },
+    "successfulConfiguration": "Configuration of device has been successful, you can connect to desired Wifi now.",
+    "@successfulConfiguration": {
+        "description": "Message shown after successful device configuration"
+    },
+    "addDevice": "Add Device",
+    "@addDevice": {
+        "description": "Button to add a new device"
+    },
+    "home": "Home",
+    "@home": {
+        "description": "Label for the Home tab in the bottom navigation bar"
+    },
+    "scene": "Scene",
+    "@scene": {
+        "description": "Label for the Scene tab in the bottom navigation bar"
+    },
+    "me": "Me",
+    "@me": {
+        "description": "Label for the Me tab in the bottom navigation bar"
+    },
+    "brightness": "Brightness :",
+    "@brightness": {
+        "description": "Label for brightness control"
+    },
+    "timer": "Timer",
+    "@timer": {
+        "description": "Label for timer button"
+    },
+    "unexpected_error": "An unexpected error occurred.",
+    "@unexpected_error": {
+        "description": "Message displayed when an unexpected error happens."
+    },
+    "try_again": "Please try again later.",
+    "@try_again": {
+        "description": "Message displayed for users to try again later."
+    },
+    "add_scene": "Add Scene",
+    "@add_scene": {
+        "description": "Button label for adding a new scene."
+    },
+    "schedule": "Schedule",
+    "@schedule": {
+        "description": "Title of the SwitchPick screen."
+    },
+    "offline": "Offline",
+    "@offline": {
+        "description": "Indicates that the device is not connected."
+    },
+    "online": "Online",
+    "@online": {
+        "description": "Indicates that the device is connected."
+    },
+    "on": "On",
+    "@on": {
+        "description": "Indicates that the device is turned on."
+    },
+    "off": "Off",
+    "@off": {
+        "description": "Indicates that the device is turned off."
+    },
+    "no_change": "No Change",
+    "@no_change": {
+        "description": "Indicates that there will be no change to the device's state."
+    }
 }

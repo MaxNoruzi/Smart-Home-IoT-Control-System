@@ -80,29 +80,6 @@ class _ScannerState extends State<Scanner> {
     );
   }
 
-  // Future<void> _startScan(BuildContext context) async {
-  //   await _requestPermission(permission: Permission.bluetoothScan);
-  //   await _requestPermission(permission: Permission.location);
-  //   await _requestPermission(permission: Permission.nearbyWifiDevices);
-  //   await _requestPermission(permission: Permission.bluetooth);
-  //   // check if "can" startScan
-  //   if (shouldCheckCan) {
-  //     // check if can-startScan
-  //     final can = await WiFiScan.instance.canStartScan();
-  //     // if can-not, then show error
-  //     if (can != CanStartScan.yes) {
-  //       if (context.mounted) kShowSnackBar(context, "Cannot start scan: $can");
-  //       return;
-  //     }
-  //   }
-
-  //   // call startScan API
-  //   final result = await WiFiScan.instance.startScan();
-  //   if (context.mounted) kShowSnackBar(context, "startScan: $result");
-  //   // reset access points.
-  //   setState(() => accessPoints = <WiFiAccessPoint>[]);
-  // }
-
   Future<bool> _canGetScannedResults(BuildContext context) async {
     if (shouldCheckCan) {
       // check if can-getScannedResults
@@ -121,10 +98,6 @@ class _ScannerState extends State<Scanner> {
                 context: context,
                 onButtonPressed: () async {
                   await Geolocator.openLocationSettings();
-                  // Navigator.of(context).pop();
-                  // setState(() {
-                  //   isLoading = false;
-                  // });
                 },
                 warningMessage: "Please turn on your location.",
                 textMessage: "Settings.");
@@ -232,29 +205,6 @@ class _ScannerState extends State<Scanner> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: [
-                          //     ElevatedButton.icon(
-                          //       icon: const Icon(Icons.perm_scan_wifi),
-                          //       label: const Text('SCAN'),
-                          //       onPressed: () async => _startScan(context),
-                          //     ),
-                          //     ElevatedButton.icon(
-                          //       icon: const Icon(Icons.refresh),
-                          //       label: const Text('GET'),
-                          //       onPressed: () async => _getScannedResults(context),
-                          //     ),
-                          //     _buildToggle(
-                          //       label: "STREAM",
-                          //       value: isStreaming,
-                          //       onChanged: (shouldStream) async => shouldStream
-                          //           ? await _startListeningToScanResults(context)
-                          //           : _stopListeningToScanResults(),
-                          //     ),
-                          //   ],
-                          // ),
-                          // const Divider(),
                           Flexible(
                             child: Center(
                               child: accessPoints.isEmpty

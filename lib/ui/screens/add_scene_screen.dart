@@ -62,22 +62,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     child: SceneDeviceWidget(
                       keyStates: keysList[index],
                       device: device,
-                      // onTap: () {
-                      //   setState(() {
-                      //     // Toggle the state for this device when tapped
-                      //     if (device.keys.first == -1) {
-                      //       // It's offline, do nothing or show a message
-                      //       ScaffoldMessenger.of(context).showSnackBar(
-                      //         SnackBar(
-                      //             content: Text('${device.nodeID} is offline!')),
-                      //       );
-                      //     } else {
-                      //       // Here you can handle state changes for devices
-                      //       device.keys[0] =
-                      //           device.keys[0] == 1 ? 0 : 1; // Toggle the state
-                      //     }
-                      //   });
-                      // },
                     ),
                   );
                 },
@@ -88,11 +72,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             ElevatedButton(
               onPressed: () {
                 // Handle saving scene logic
-                print('Scene Name: $sceneName');
-                Utils.deviceList.forEach((device) {
-                  print(
-                      '${device.nodeID}: ${device.keys.first == 1 ? 'On' : 'Off'}');
-                });
+                Utils.deviceList.forEach((device) {});
               },
               child: const Text('Save Scene'),
             ),

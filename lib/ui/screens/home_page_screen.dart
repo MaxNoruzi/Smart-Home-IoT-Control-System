@@ -69,15 +69,7 @@ class _MyHomePageState extends State<HomePageScreen> {
               maxLine: 1,
               shadowElevation: 16,
               kBottomRadius: 0.0,
-              // notchShader: const SweepGradient(
-              //   startAngle: 0,
-              //   endAngle: pi / 2,
-              //   colors: [Colors.white, Colors.orange,Colors.white],
-              //   tileMode: TileMode.mirror,
-              // ).createShader(Rect.fromCircle(center: Offset.zero, radius: 8.0)),
-              // notchColor:  Colors.deepPurple.shade300,
 
-              /// restart app if you change removeMargins
               removeMargins: true,
               bottomBarWidth: 500,
               showShadow: false,

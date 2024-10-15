@@ -1,3 +1,158 @@
 {
-    "helloWorld": " سلام دنیا"
+    "warning": "هشدار",
+    "@warning": {
+        "description": "عنوان برای دیالوگ هشدار"
+    },
+    "noValidDevices": "دستگاه معتبر یافت نشد، لطفاً از دکمه دریافت استفاده کنید.",
+    "@noValidDevices": {
+        "description": "پیام نمایش داده شده زمانی که دستگاه معتبر یافت نمی‌شود"
+    },
+    "wifiOff": "وای فای شما خاموش است، لطفاً آن را روشن کنید.",
+    "@wifiOff": {
+        "description": "پیام هشدار زمانی که وای فای غیرفعال است"
+    },
+    "turnOnWifi": "وای فای را روشن کنید",
+    "@turnOnWifi": {
+        "description": "متن دکمه برای روشن کردن وای فای"
+    },
+    "noScannedResults": "نتایج اسکن شده وجود ندارد",
+    "@noScannedResults": {
+        "description": "پیام نمایش داده شده زمانی که نتایج اسکن شده وجود ندارد"
+    },
+    "editWifiSettings": "ویرایش تنظیمات WiFi",
+    "@editWifiSettings": {
+        "description": "عنوان برای ویرایش تنظیمات WiFi"
+    },
+    "wifiSsid": "SSID وای فای",
+    "@wifiSsid": {
+        "description": "برچسب برای فیلد ورودی SSID وای فای"
+    },
+    "wifiPassword": "رمز عبور WiFi",
+    "@wifiPassword": {
+        "description": "برچسب برای فیلد ورودی رمز عبور وای فای"
+    },
+    "username": "نام کاربری",
+    "@username": {
+        "description": "برچسب برای فیلد ورودی نام کاربری"
+    },
+    "userPassword": "رمز عبور کاربر",
+    "@userPassword": {
+        "description": "برچسب برای فیلد ورودی رمز عبور کاربر"
+    },
+    "confirm": "تایید",
+    "@confirm": {
+        "description": "متن دکمه برای تأیید تنظیمات وای فای"
+    },
+    "connected": "به متصل شد",
+    "@connected": {
+        "description": "پیام نمایش داده شده زمانی که به شبکه وای فای متصل می‌شود"
+    },
+    "failedToConnect": "متصل نشد به",
+    "@failedToConnect": {
+        "description": "پیام نمایش داده شده زمانی که اتصال به شبکه وای فای شکست می‌خورد"
+    },
+    "somethingWentWrong": "مشکلی پیش آمده است، لطفاً دوباره تلاش کنید.",
+    "@somethingWentWrong": {
+        "description": "پیام خطای عمومی"
+    },
+    "createScene": "ایجاد صحنه",
+    "@createScene": {
+        "description": "عنوان صفحه‌ای که می‌توان در آن یک صحنه جدید ایجاد کرد"
+    },
+    "sceneName": "نام صحنه",
+    "@sceneName": {
+        "description": "برچسب برای فیلد ورودی نام صحنه"
+    },
+    "saveScene": "ذخیره صحنه",
+    "@saveScene": {
+        "description": "متن دکمه برای ذخیره صحنه ایجاد شده"
+    },
+    "allDevices": "لیست دستگاه‌ها",
+    "@allDevices": {
+        "description": "برچسب برای لیست دستگاه‌ها"
+    },
+    "addSchedule": "اضافه کردن زمان‌بندی",
+    "@addSchedule": {
+        "description": "عنوان صفحه‌ای که می‌توان در آن یک زمان‌بندی جدید ایجاد کرد"
+    },
+    "save": "ذخیره",
+    "@save": {
+        "description": "متن دکمه برای ذخیره زمان‌بندی ایجاد شده"
+    },
+    "selectDesiredDays": "روزهای دلخواه را انتخاب کنید",
+    "@selectDesiredDays": {
+        "description": "برچسب برای انتخاب روزهای هفته"
+    },
+    "switchh": "کلید ",
+    "@switchh": {
+        "description": "برچسب برای کلید مرتبط با دستگاه انتخاب شده که {number} با شماره کلید جایگزین خواهد شد"
+    },
+    "tooltipMessage": "پس از انتخاب روزهای مورد نیاز و انتخاب فرمان صحیح، دستگاه در زمان مناسب فعال خواهد شد.",
+    "@tooltipMessage": {
+        "description": "پیام راهنمایی که عملکرد انتخاب روزها و دستورات را توضیح می‌دهد"
+    },
+    "successfulConfiguration": "پیکربندی دستگاه با موفقیت انجام شد، اکنون می‌توانید به Wi-Fi مورد نظر متصل شوید.",
+    "@successfulConfiguration": {
+        "description": "پیام نمایش داده شده پس از پیکربندی موفق دستگاه"
+    },
+    "addDevice": "افزودن دستگاه",
+    "@addDevice": {
+        "description": "دکمه برای افزودن دستگاه جدید"
+    },
+    "home": "خانه",
+    "@home": {
+        "description": "برچسب برای برگه خانه در نوار ناوبری پایینی"
+    },
+    "scene": "صحنه",
+    "@scene": {
+        "description": "برچسب برای برگه صحنه در نوار ناوبری پایینی"
+    },
+    "me": "من",
+    "@me": {
+        "description": "برچسب برای برگه من در نوار ناوبری پایینی"
+    },
+    "brightness": "روشنی :",
+    "@brightness": {
+        "description": "برچسب برای کنترل روشنایی"
+    },
+    "timer": "زمانبندی",
+    "@timer": {
+        "description": "برچسب برای دکمه زمانبندی"
+    },
+    "unexpected_error": "اتفاقی غیر منتظره رخ داده است .",
+    "@unexpected_error": {
+        "description": "پیامی که در صورت وقوع یک خطای غیر منتظره نمایش داده می‌شود."
+    },
+    "try_again": "لطفا بعدا دوباره تلاش کنید.",
+    "@try_again": {
+        "description": "پیامی که برای کاربران جهت تلاش دوباره در آینده نمایش داده می‌شود."
+    },
+    "add_scene": "اضافه کردن صحنه",
+    "@add_scene": {
+        "description": "برچسب دکمه برای اضافه کردن صحنه جدید."
+    },
+    "schedule": "برنامه ریزی",
+    "@schedule": {
+        "description": "عنوان صفحه SwitchPick."
+    },
+    "offline": "غیرفعال",
+    "@offline": {
+        "description": "نشان می‌دهد که دستگاه متصل نیست."
+    },
+    "online": "فعال",
+    "@online": {
+        "description": "نشان می‌دهد که دستگاه متصل است."
+    },
+    "on": "فعال",
+    "@on": {
+        "description": "نشان می‌دهد که دستگاه روشن است."
+    },
+    "off": "غیرفعال",
+    "@off": {
+        "description": "نشان می‌دهد که دستگاه خاموش است."
+    },
+    "no_change": "بدون تغییر",
+    "@no_change": {
+        "description": "نشان می‌دهد که تغییری در وضعیت دستگاه نخواهد بود."
+    }
 }
