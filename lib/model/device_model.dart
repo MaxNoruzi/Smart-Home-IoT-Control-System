@@ -27,6 +27,15 @@ class Device {
       'Channel': channel,
     };
   }
+
+  Map<String, dynamic> toJsonScene({required List<int> states}) {
+    return {
+      'NodeID': nodeID,
+      'Token': token,
+      'Channel': channel,
+      'states': states,
+    };
+  }
 }
 
 // class DevicesList {

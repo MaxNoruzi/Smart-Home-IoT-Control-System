@@ -261,7 +261,8 @@ class _AccessPointTile extends StatelessWidget {
         TextEditingController(text: wifiConfig.username);
     final TextEditingController userPasswordController =
         TextEditingController(text: wifiConfig.userPassword);
-
+    bool obscureText = true;
+    bool useUserInfo = false;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -270,119 +271,270 @@ class _AccessPointTile extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Title
-                Text(
-                  'ویرایش تنظیمات WiFi',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-                SizedBox(height: 16),
-
-                // WiFi SSID
-                TextField(
-                  controller: ssidController,
-                  decoration: InputDecoration(
-                    labelText: 'SSID WiFi',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+        return SingleChildScrollView(
+          child: StatefulBuilder(
+              builder: (context, setState) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    prefixIcon: Icon(Icons.wifi),
-                  ),
-                ),
-                SizedBox(height: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Title
+                          Text(
+                            'ویرایش تنظیمات WiFi',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          SizedBox(height: 16),
 
-                // WiFi Password
-                TextField(
-                  controller: wifiPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'رمز عبور WiFi',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                  obscureText: true,
-                ),
-                SizedBox(height: 16),
+                          // WiFi SSID
+                          TextField(
+                            controller: ssidController,
+                            decoration: InputDecoration(
+                              labelText: 'SSID WiFi',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              prefixIcon: Icon(Icons.wifi),
+                            ),
+                          ),
+                          SizedBox(height: 16),
 
-                // Username
-                TextField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'نام کاربری',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.person),
-                  ),
-                ),
-                SizedBox(height: 16),
+                          // WiFi Password
+                          TextField(
+                            controller: wifiPasswordController,
+                            decoration: InputDecoration(
+                              labelText: 'رمز عبور WiFi',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                            obscureText: true,
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Use user information"),
+                              Switch(
+                                  value: useUserInfo,
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        useUserInfo = value;
+                                        if (value) {
+                                          usernameController.text =
+                                              Utils.username;
+                                          userPasswordController.text =
+                                              Utils.password;
+                                        } else {
+                                          usernameController.text =
+                                              wifiConfig.username;
+                                          userPasswordController.text =
+                                              wifiConfig.userPassword;
+                                        }
+                                      },
+                                    );
+                                  })
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          // Username
+                          TextField(
+                            controller: usernameController,
+                            decoration: InputDecoration(
+                              labelText: 'نام کاربری',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                          ),
+                          SizedBox(height: 16),
 
-                // User Password
-                TextField(
-                  controller: userPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'رمز عبور کاربر',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                  obscureText: true,
-                ),
-                SizedBox(height: 32),
+                          // User Password
+                          TextField(
+                            controller: userPasswordController,
+                            decoration: InputDecoration(
+                                labelText: 'رمز عبور کاربر',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                prefixIcon: Icon(Icons.lock_outline),
+                                suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      setState(
+                                        () => obscureText = !obscureText,
+                                      );
+                                    },
+                                    child: Icon(!obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off))),
+                            obscureText: obscureText,
+                          ),
+                          SizedBox(height: 32),
 
-                // Confirm Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                          // Confirm Button
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Colors.blueGrey,
+                                elevation: 5.0,
+                              ),
+                              onPressed: () {
+                                // Create a new WiFiConfig object with updated values
+                                final updatedWiFiConfig = WiFiConfig(
+                                  wifiSSID: ssidController.text,
+                                  wifiPassword: wifiPasswordController.text,
+                                  username: usernameController.text,
+                                  userPassword: userPasswordController.text,
+                                );
+                                // Pass the updated object to the callback
+                                onConfirm(updatedWiFiConfig);
+                                // Close the bottom sheet
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'تایید',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 24),
+                        ],
                       ),
-                      backgroundColor: Colors.blueGrey,
-                      elevation: 5.0,
                     ),
-                    onPressed: () {
-                      // Create a new WiFiConfig object with updated values
-                      final updatedWiFiConfig = WiFiConfig(
-                        wifiSSID: ssidController.text,
-                        wifiPassword: wifiPasswordController.text,
-                        username: usernameController.text,
-                        userPassword: userPasswordController.text,
-                      );
-                      // Pass the updated object to the callback
-                      onConfirm(updatedWiFiConfig);
-                      // Close the bottom sheet
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'تایید',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24),
-              ],
-            ),
-          ),
+                  )),
         );
+        // return Padding(
+        //   padding: EdgeInsets.only(
+        //     bottom: MediaQuery.of(context).viewInsets.bottom,
+        //   ),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(24.0),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         // Title
+        //         Text(
+        //           'ویرایش تنظیمات WiFi',
+        //           style: TextStyle(
+        //             fontSize: 20,
+        //             fontWeight: FontWeight.bold,
+        //             color: Colors.blueGrey,
+        //           ),
+        //         ),
+        //         SizedBox(height: 16),
+
+        //         // WiFi SSID
+        //         TextField(
+        //           controller: ssidController,
+        //           decoration: InputDecoration(
+        //             labelText: 'SSID WiFi',
+        //             border: OutlineInputBorder(
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             prefixIcon: Icon(Icons.wifi),
+        //           ),
+        //         ),
+        //         SizedBox(height: 16),
+
+        //         // WiFi Password
+        //         TextField(
+        //           controller: wifiPasswordController,
+        //           decoration: InputDecoration(
+        //             labelText: 'رمز عبور WiFi',
+        //             border: OutlineInputBorder(
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             prefixIcon: Icon(Icons.lock),
+        //           ),
+        //           obscureText: true,
+        //         ),
+        //         SizedBox(height: 16),
+
+        //         SizedBox(height: 16),
+        //         // Username
+        //         TextField(
+        //           controller: usernameController,
+        //           decoration: InputDecoration(
+        //             labelText: 'نام کاربری',
+        //             border: OutlineInputBorder(
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             prefixIcon: Icon(Icons.person),
+        //           ),
+        //         ),
+        //         SizedBox(height: 16),
+
+        //         // User Password
+        //         TextField(
+        //           controller: userPasswordController,
+        //           decoration: InputDecoration(
+        //             labelText: 'رمز عبور کاربر',
+        //             border: OutlineInputBorder(
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             prefixIcon: Icon(Icons.lock_outline),
+        //           ),
+        //           obscureText: obscureText,
+        //         ),
+        //         SizedBox(height: 32),
+
+        //         // Confirm Button
+        //         SizedBox(
+        //           width: double.infinity,
+        //           child: ElevatedButton(
+        //             style: ElevatedButton.styleFrom(
+        //               padding: EdgeInsets.symmetric(vertical: 16.0),
+        //               shape: RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(12),
+        //               ),
+        //               backgroundColor: Colors.blueGrey,
+        //               elevation: 5.0,
+        //             ),
+        //             onPressed: () {
+        //               // Create a new WiFiConfig object with updated values
+        //               final updatedWiFiConfig = WiFiConfig(
+        //                 wifiSSID: ssidController.text,
+        //                 wifiPassword: wifiPasswordController.text,
+        //                 username: usernameController.text,
+        //                 userPassword: userPasswordController.text,
+        //               );
+        //               // Pass the updated object to the callback
+        //               onConfirm(updatedWiFiConfig);
+        //               // Close the bottom sheet
+        //               Navigator.pop(context);
+        //             },
+        //             child: Text(
+        //               'تایید',
+        //               style: TextStyle(
+        //                 fontSize: 18,
+        //                 color: Colors.white,
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         SizedBox(height: 24),
+        //       ],
+        //     ),
+        //   ),
+        // );
       },
     );
   }
@@ -431,16 +583,18 @@ class _AccessPointTile extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
                 onError: (error) {
-                  Utils.kShowSnackBar(
-                      context, "Something went wrong please try again.");
+                  // Utils.kShowSnackBar(
+                  //     context, "Something went wrong please try again.");
+                  Utils.kShowSnackBar(context, error.title.toString());
                 },
               );
             },
           );
         },
         onError: (error) {
-          Utils.kShowSnackBar(
-              context, "Something went wrong please try again.");
+          // Utils.kShowSnackBar(
+          //     context, "Something went wrong please try again.");
+          Utils.kShowSnackBar(context, error.title.toString());
         },
       );
     } else {

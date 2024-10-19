@@ -29,7 +29,34 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     if (!isClosed) super.emit(state);
   }
 
-  void onListen(BaseEvent event) {}
+  void onListen(BaseEvent event) async {
+    // BaseEvent event;
+    try {
+      // event = await compute(
+      //     (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
+
+      // BaseEvent.fromJson(jsonDecode(model.input));
+      switch (event.eventType) {
+        case EventType.nuAckDelTimer:
+          break;
+        case EventType.nuAckTimer:
+          break;
+        case EventType.unschAck:
+          break;
+        case EventType.nuTimerDone:
+          break;
+        case EventType.unDelSchedAck:
+          break;
+        default:
+      }
+      log("type recived : " + event.eventType.toString());
+    } catch (e) {
+      if (!e.toString().contains("Sample")) log(e.toString());
+    }
+
+    // log(model.input);
+  }
+
   void startTimer() {
     timerStarted = true;
     emit(Empty());
@@ -40,6 +67,11 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     emit(Empty());
   }
 
+  int changeStartSunday(int value) {
+    if (value == 0) return 6;
+    return value - 1;
+  }
+
   void addSchedule({required ScheduleModel model}) {
     int SchedID = (model.time.hour * 3600) * (model.time.minute * 60) +
         (model.weekDays
@@ -47,10 +79,20 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     String ScheduleTxt = "";
     for (var i = 0; i < model.weekDays.length; i++) {
       ScheduleTxt = ScheduleTxt +
-          model.weekDays[i].toString() +
+          changeStartSunday(model.weekDays[i]).toString() +
           ((i < model.weekDays.length - 1) ? "," : "");
     }
-    log(model.toJson().toString());
+    log('''
+    {
+    "Type": "U-Sch",
+    "NodeID": "${device.nodeID}",
+    "Token": "${device.token}",
+    "Schedule": "($ScheduleTxt)-${model.time.toUtc().hour}-${model.time.toUtc().minute}",
+    "SchedID": $SchedID,
+    "Action": {
+        "Key": "K${keyNumber}_${model.state ? 1 : 0}"
+    }
+    }''');
     client.publish(Utils.topic, '''
     {
     "Type": "U-Sch",
@@ -63,6 +105,39 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     }
     }''');
   }
+
+  void addTimer({required DateTime time}) {
+    String timerID =
+        ((time.hour * 3600) * (time.minute * 60) + (time.second)).toString();
+    log('''
+{
+    "Type": "U-Timer",
+    "NodeID": "${device.nodeID}",
+    "Token": "${device.token}",
+    "TimerID": ${timerID},
+    "Timer": "K${keyNumber}_1-${time.hour}:${time.minute}:${time.second}"
+}
+''');
+    client.publish(Utils.topic, '''
+{
+    "Type": "U-Timer",
+    "NodeID": "${device.nodeID}",
+    "Token": "${device.token}",
+    "TimerID": ${timerID},
+    "Timer": "K${keyNumber}_1-${time.hour}:${time.minute}:${time.second}"
+}
+''');
+  }
+
+//   ```
+// {
+//     "Type": "U-Timer",
+//     "NodeID": "KEY-CH4-65325648976543",
+//     "Token": "dajwkdnakwjodip12qjdnjbnalmksdOJNSLKhskljdhbh",
+//     "TimerID": 52260,
+//     "Timer": "K2_1-02:25:10"
+// }
+// ```
 //   {
 //     "Type": "U-Sch",
 //     "NodeID": "KEY-CH4-645358",

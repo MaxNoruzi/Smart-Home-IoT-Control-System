@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
-import 'package:iot_project/model/listen_model.dart';
 import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
@@ -24,6 +21,11 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
   late MqttService client;
   Set<int> loadingList = {};
   String topic; // "users/" + Utils.username
+  @override
+  void emit(DeviceControlState state) {
+    if (!isClosed) super.emit(state);
+  }
+
   // void onListen(ListenModel model) async {
   void onListen(BaseEvent event) async {
     // BaseEvent event;

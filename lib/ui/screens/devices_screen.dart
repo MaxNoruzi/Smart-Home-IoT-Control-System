@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iot_project/cubit/device_control_cubit.dart' as control;
 import 'package:iot_project/cubit/devices_screen_cubit.dart';
@@ -52,57 +51,94 @@ class _DevicesScreenState extends State<DevicesScreen> {
               ],
             ),
             Expanded(
-              child: (state is Loading)
-                  ? const CustomLoadingWidget()
-                  : (state is Error)
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 32),
-                          child: CustomError(
-                            error: state.error,
-                            onCall: state.onCall,
-                          ),
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: List.generate(
-                              Utils.deviceList.length,
-                              (index) => DeviceWidget(
-                                    device: Utils.deviceList[index],
-                                    onTap: () {
-                                      if (Utils.deviceList[index].keys.first !=
-                                          -1) {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => BlocProvider(
-                                            create: (context) =>
-                                                control.DeviceControlCubit(
-                                                    client: _cubit.client,
-                                                    device:
-                                                        Utils.deviceList[index],
-                                                    topic:
-                                                        "users/${Utils.username}"),
-                                            child: LightSwitchScreen(
-                                                device:
-                                                    Utils.deviceList[index]),
-                                          ),
-                                        ));
-                                      }
+                child: (state is Loading)
+                    ? const CustomLoadingWidget()
+                    : (state is Error)
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 32),
+                            child: CustomError(
+                              error: state.error,
+                              onCall: state.onCall,
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () {
+                              _cubit.fetchDevices();
+                              return Future(() => null);
+                            },
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: Utils.deviceList.length,
+                              itemBuilder: (context, index) => DeviceWidget(
+                                device: Utils.deviceList[index],
+                                onTap: () {
+                                  if (Utils.deviceList[index].keys.first !=
+                                      -1) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => BlocProvider(
+                                        create: (context) =>
+                                            control.DeviceControlCubit(
+                                                client: _cubit.client,
+                                                device: Utils.deviceList[index],
+                                                topic:
+                                                    "users/${Utils.username}"),
+                                        child: LightSwitchScreen(
+                                            device: Utils.deviceList[index]),
+                                      ),
+                                    ));
+                                  }
 
-                                      // _cubit.changeModule(
-                                      //   device: Utils.deviceList[index])
-                                    },
-                                  )
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       _cubit.changeModule(
-                              //           device: Utils.deviceList[index]);
-                              //     },
-                              //     child:
-                              //         Text(Utils.deviceList[index].nodeID))
-
+                                  // _cubit.changeModule(
+                                  //   device: Utils.deviceList[index])
+                                },
                               ),
-                        ),
-            )
+                            ),
+                          )
+                //  Column(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: List.generate(
+                //         Utils.deviceList.length,
+                //         (index) => DeviceWidget(
+                //               device: Utils.deviceList[index],
+                //               onTap: () {
+                //                 if (Utils.deviceList[index].keys
+                //                         .first !=
+                //                     -1) {
+                //                   Navigator.of(context)
+                //                       .push(MaterialPageRoute(
+                //                     builder: (context) =>
+                //                         BlocProvider(
+                //                       create: (context) =>
+                //                           control.DeviceControlCubit(
+                //                               client: _cubit.client,
+                //                               device: Utils
+                //                                   .deviceList[index],
+                //                               topic:
+                //                                   "users/${Utils.username}"),
+                //                       child: LightSwitchScreen(
+                //                           device: Utils
+                //                               .deviceList[index]),
+                //                     ),
+                //                   ));
+                //                 }
+
+                //                 // _cubit.changeModule(
+                //                 //   device: Utils.deviceList[index])
+                //               },
+                //             )
+                //         // GestureDetector(
+                //         //     onTap: () {
+                //         //       _cubit.changeModule(
+                //         //           device: Utils.deviceList[index]);
+                //         //     },
+                //         //     child:
+                //         //         Text(Utils.deviceList[index].nodeID))
+
+                //         ),
+                //   ),
+
+                )
           ],
         );
       },

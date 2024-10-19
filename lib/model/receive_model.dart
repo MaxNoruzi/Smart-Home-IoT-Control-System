@@ -1,78 +1,16 @@
-// import 'package:iot_project/utils/utils.dart';
-
-// class ReceiveModel {
-//   ReceiveTypes type;
-//   String nodeId;
-//   String token;
-//   String keys;
-//   Event event;
-  
-//   ReceiveModel(
-//       {required this.type,
-//       required this.nodeId,
-//       required this.token,
-//       required this.event,
-//       required this.keys});
-
-//   // Factory method to create an EventModel object from JSON
-//   factory ReceiveModel.fromJson(Map<String, dynamic> json) {
-//     return ReceiveModel(
-//       type: Utils.stringToEnum(json['Type'] ?? ''),
-//       nodeId: json['NodeID'] ?? '',
-//       token: json['Token'] ?? '',
-//       keys: json['Keys'] ?? '',
-
-//       event: Event.fromJson(json['Event'] ?? {}),
-//     );
-//   }
-
-//   // Method to convert an EventModel object to JSON
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'Type': type,
-//       'NodeID': nodeId,
-//       'Token': token,
-//       'Event': event.toJson(),
-//     };
-//   }
-// }
-
-// class Event {
-//   String type;
-//   String key;
-//   String eventValue;
-
-//   Event({
-//     required this.type,
-//     required this.key,
-//     required this.eventValue,
-//   });
-
-//   // Factory method to create an Event object from JSON
-//   factory Event.fromJson(Map<String, dynamic> json) {
-//     return Event(
-//       type: json['Type'] ?? '',
-//       key: json['Key'] ?? '',
-//       eventValue: json['EventValue'] ?? '',
-//     );
-//   }
-
-//   // Method to convert an Event object to JSON
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'Type': type,
-//       'Key': key,
-//       'EventValue': eventValue,
-//     };
-//   }
-// }
 // Enum representing different event types
 enum EventType {
   event,
-  uu,      // Update from node
-  ruu,     // Request User Update
-  ackKey,  // Acknowledgement for Key
-  ackPwm   // Acknowledgement for PWM
+  uu, // Update from node
+  ruu, // Request User Update
+  ackKey, // Acknowledgement for Key
+  ackPwm,
+  unschAck,
+  unDelSchedAck,
+  nuAckTimer,
+  nuTimerDone,
+  nuAckDelTimer
+  // Acknowledgement for PWM
 }
 
 // enum ReceiveTypes { ACK, EVENT, RUU, SAMPLE }
@@ -86,7 +24,7 @@ abstract class BaseEvent {
   // Factory method to distinguish the right event type and return the appropriate class
   factory BaseEvent.fromJson(Map<String, dynamic> json) {
     String typeString = json['Type'] ?? '';
-  
+
     switch (typeString) {
       case 'Event':
         return NodeEvent.fromJson(json);
@@ -96,11 +34,202 @@ abstract class BaseEvent {
         return RequestUserUpdate.fromJson(json);
       case 'UserAckKey': // Acknowledgement for key events
         return AckResponse.fromJson(json, EventType.ackKey);
-      case 'UserAckPWM': // Acknowledgement for PWM events
+      case 'UserAckPWM': 
         return AckResponse.fromJson(json, EventType.ackPwm);
+      case 'UN-SchAck':
+        return UNSchAck.fromJson(json);
+      case 'UN-DelSchedAck':
+        return UNDelSchedAck.fromJson(json);
+      case 'NU-AckTimer':
+        return NUAckTimer.fromJson(json);
+      case 'NU-TimerDone':
+        return NUTimerDone.fromJson(json);
+      case "NU-AckDelTimer":
+        return NUAckDelTimer.fromJson(json);
       default:
         throw Exception('Unknown event type: $typeString');
     }
+  }
+}
+
+class NUAckDelTimer extends BaseEvent {
+  String type;
+  String nodeId;
+  String token;
+  int timerID;
+
+  // Constructor
+  NUAckDelTimer({
+    required this.type,
+    required this.nodeId,
+    required this.token,
+    required this.timerID,
+  }) : super(EventType.nuAckDelTimer); // Assuming EventType.uu is correct
+
+  // Factory constructor to create an instance from a JSON map
+  factory NUAckDelTimer.fromJson(Map<String, dynamic> json) {
+    return NUAckDelTimer(
+      type: json['Type'] ?? '',
+      nodeId: json['NodeID'] ?? '',
+      token: json['Token'] ?? '',
+      timerID: json['TimerID'] ?? 0,
+    );
+  }
+
+  // Method to convert the object back to JSON
+
+  Map<String, dynamic> toJson() {
+    return {
+      'Type': type,
+      'NodeID': nodeId,
+      'Token': token,
+      'TimerID': timerID,
+    };
+  }
+}
+
+class NUTimerDone extends BaseEvent {
+  String type;
+  String nodeId;
+  String token;
+  int timerID;
+  String timestamp;
+
+  // Constructor
+  NUTimerDone({
+    required this.type,
+    required this.nodeId,
+    required this.token,
+    required this.timerID,
+    required this.timestamp,
+  }) : super(EventType.nuTimerDone); // Assuming EventType.uu is correct
+
+  // Factory constructor to create an instance from a JSON map
+  factory NUTimerDone.fromJson(Map<String, dynamic> json) {
+    return NUTimerDone(
+      type: json['Type'] ?? '',
+      nodeId: json['NodeID'] ?? '',
+      token: json['Token'] ?? '',
+      timerID: json['TimerID'] ?? 0,
+      timestamp: json['Timestamp'] ?? '',
+    );
+  }
+
+  // Method to convert the object back to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'Type': type,
+      'NodeID': nodeId,
+      'Token': token,
+      'TimerID': timerID,
+      'Timestamp': timestamp,
+    };
+  }
+}
+
+class NUAckTimer extends BaseEvent {
+  String type;
+  String nodeId;
+  String token;
+  int timerID;
+
+  // Constructor
+  NUAckTimer({
+    required this.type,
+    required this.nodeId,
+    required this.token,
+    required this.timerID,
+  }) : super(EventType.nuAckTimer); // Assuming EventType.uu is correct
+
+  // Factory constructor to create an instance from a JSON map
+  factory NUAckTimer.fromJson(Map<String, dynamic> json) {
+    return NUAckTimer(
+      type: json['Type'] ?? '',
+      nodeId: json['NodeID'] ?? '',
+      token: json['Token'] ?? '',
+      timerID: json['TimerID'] ?? 0,
+    );
+  }
+
+  // Method to convert the object back to JSON
+
+  Map<String, dynamic> toJson() {
+    return {
+      'Type': type,
+      'NodeID': nodeId,
+      'Token': token,
+      'TimerID': timerID,
+    };
+  }
+}
+
+class UNDelSchedAck extends BaseEvent {
+  String type;
+  String nodeId;
+  String token;
+  int schedID;
+
+  // Constructor
+  UNDelSchedAck({
+    required this.type,
+    required this.nodeId,
+    required this.token,
+    required this.schedID,
+  }) : super(EventType.unDelSchedAck); // Assuming EventType.uu is correct
+
+  // Factory constructor to create an instance from a JSON map
+  factory UNDelSchedAck.fromJson(Map<String, dynamic> json) {
+    return UNDelSchedAck(
+      type: json['Type'] ?? '',
+      nodeId: json['NodeID'] ?? '',
+      token: json['Token'] ?? '',
+      schedID: json['SchedID'] ?? 0,
+    );
+  }
+
+  // Method to convert the object back to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'Type': type,
+      'NodeID': nodeId,
+      'Token': token,
+      'SchedID': schedID,
+    };
+  }
+}
+
+class UNSchAck extends BaseEvent {
+  String type;
+  String nodeId;
+  String token;
+  int schedID;
+
+  // Constructor
+  UNSchAck({
+    required this.type,
+    required this.nodeId,
+    required this.token,
+    required this.schedID,
+  }) : super(EventType.unschAck); // Assuming you're using EventType.uu
+
+  // Factory constructor to create an instance from a JSON map
+  factory UNSchAck.fromJson(Map<String, dynamic> json) {
+    return UNSchAck(
+      type: json['Type'] ?? '',
+      nodeId: json['NodeID'] ?? '',
+      token: json['Token'] ?? '',
+      schedID: json['SchedID'] ?? 0,
+    );
+  }
+
+  // Method to convert the object back to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'Type': type,
+      'NodeID': nodeId,
+      'Token': token,
+      'SchedID': schedID,
+    };
   }
 }
 
@@ -294,8 +423,8 @@ class AckDetails {
 
   AckDetails({
     required this.type,
-     this.key,
-     this.eventValue,
+    this.key,
+    this.eventValue,
     this.pwm,
   });
 
@@ -317,4 +446,3 @@ class AckDetails {
     };
   }
 }
-

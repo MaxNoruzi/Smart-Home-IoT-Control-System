@@ -29,6 +29,24 @@ class _SceneScreenState extends State<SceneScreen> {
               ))
         ],
       ),
+      body: ListView.builder(
+        padding: EdgeInsets.all(8),
+        itemBuilder: (context, index) => Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height * 0.2,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade500),
+              gradient: LinearGradient(colors: [
+                Colors.grey.shade400,
+                Colors.grey.shade300,
+                Colors.grey.shade200,
+                Colors.grey.shade100
+              ])),
+          // child: ,
+        ),
+        itemCount: 1,
+      ),
     );
   }
 }

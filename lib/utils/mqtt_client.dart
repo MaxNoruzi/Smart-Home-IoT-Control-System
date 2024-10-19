@@ -13,7 +13,7 @@ class MqttService {
       required String clientId,
       required void Function() onDisconnected,
       required void Function() onConnected}) {
-    client = MqttServerClient(broker, clientId);
+    client = MqttServerClient(broker, clientId, maxConnectionAttempts: 1);
     client.port = 1883; // Default MQTT port
     client.keepAlivePeriod = double.maxFinite.toInt();
     client.onConnected = onConnected;

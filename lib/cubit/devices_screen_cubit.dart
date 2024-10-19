@@ -34,6 +34,8 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
 
   @override
   Future<void> close() {
+    onceRefreshed = true;
+
     client.client.disconnect();
     if (client.functionExist(onListen)) {
       client.removeFunction(onListen);
@@ -42,10 +44,12 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   }
 
   void _startClient() async {
-    await client.connect();
-    subscribeToTopic();
-    if (!client.functionExist(onListen)) {
-      client.addFunction(onListen);
+    if (!this.client.isConnected()) {
+      await client.connect();
+      subscribeToTopic();
+      if (!client.functionExist(onListen)) {
+        client.addFunction(onListen);
+      }
     }
     fetchStatus();
   }
@@ -102,22 +106,30 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
     //     onCall: () {
     //       fetchDevices();
     //     }));
-    if (!onceRefreshed) {
-      Timer(Duration(milliseconds: 100), () {
-        if (!client.isConnected() && !isClosed) {
-          onceRefreshed = true;
-          client.connect();
-        }
-      });
-    } else {
-      emit(Error(
-          error: ErrorModel(
-              title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
-              errorStatus: ErrorStatus.connection),
-          onCall: () {
-            fetchDevices();
-          }));
-    }
+    // if (!onceRefreshed) {
+    //   Timer(Duration(milliseconds: 200), () {
+    //     if (!client.isConnected() && !isClosed) {
+    //       onceRefreshed = true;
+    //       client.connect();
+    //     }
+    //   });
+    // } else {
+    Future.delayed(Duration(milliseconds: 500)).then((value) => emit(Error(
+        error: ErrorModel(
+            title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
+            errorStatus: ErrorStatus.connection),
+        onCall: () {
+          fetchDevices();
+        })));
+    // }
+    await Future.delayed(Duration(milliseconds: 500)).then((value) => emit(
+        Error(
+            error: ErrorModel(
+                title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
+                errorStatus: ErrorStatus.connection),
+            onCall: () {
+              fetchDevices();
+            })));
   }
 
   void fetchStatus({String? topic}) {
@@ -154,30 +166,33 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
                 .map((e) => Device.fromJson(e))).toList();
         Utils.deviceList = deviceList;
         emit(DevicesLoaded());
-
         _startClient();
       } else {
         if (response.body != "" &&
             jsonDecode(response.body)["status"] != null) {
           return jsonDecode(response.body)["status"];
         }
-        emit(Error(
-            error: ErrorModel(
-                title: "اتفاقی غیر منتظره رخ داده است .",
-                errorStatus: ErrorStatus.badRequest),
-            onCall: () {
-              fetchDevices();
-            }));
+        await Future.delayed(Duration(milliseconds: 500)).then((value) => emit(
+            Error(
+                error: ErrorModel(
+                    title: "اتفاقی غیر منتظره رخ داده است .",
+                    errorStatus: ErrorStatus.badRequest),
+                onCall: () {
+                  fetchDevices();
+                })));
+
         // return "اتفاقی غیر منتظره رخ داده است .";
       }
     } catch (e) {
       // "اتفاقی غیر منتظره رخ داده است ."
-      emit(Error(
-          error: ErrorModel(
-              title: e.toString(), errorStatus: ErrorStatus.badRequest),
-          onCall: () {
-            fetchDevices();
-          }));
+      await Future.delayed(Duration(milliseconds: 500)).then((value) => emit(
+          Error(
+              error: ErrorModel(
+                  title: e.toString(), errorStatus: ErrorStatus.badRequest),
+              onCall: () {
+                fetchDevices();
+              })));
+      ;
     }
   }
 }

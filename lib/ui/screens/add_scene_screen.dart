@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iot_project/ui/widgets/scene_device_widget.dart';
 import 'package:iot_project/utils/enums.dart';
 import 'package:iot_project/utils/utils.dart';
-// Assuming this is where DeviceWidget is
 
 class AddSceneScreen extends StatefulWidget {
   @override

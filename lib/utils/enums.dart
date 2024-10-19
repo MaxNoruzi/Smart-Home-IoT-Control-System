@@ -1,1 +1,1 @@
-enum switchMode { ON, OFF, NONE }
+enum switchMode { OFF, ON, NONE }
