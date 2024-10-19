@@ -1,12 +1,12 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:iot_project/cubit/timer_schedule_cubit.dart';
 import 'package:iot_project/model/schedule_model.dart';
 import 'package:iot_project/ui/screens/create_schedule_screen.dart';
+import 'package:iot_project/ui/widgets/custom_loading_widget.dart';
 
 class TimerScheduleScreen extends StatefulWidget {
   const TimerScheduleScreen({super.key});
@@ -140,7 +140,8 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
                 ),
                 child: IconButton(
                     onPressed: () {
-                      _cubit.startTimer();
+                      if (_cubit.timerSelectedTime != null)
+                        _cubit.addTimer(time: _cubit.timerSelectedTime!);
                     },
                     icon: const Icon(
                       Icons.play_circle_filled_outlined,
@@ -239,8 +240,12 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
 
   // }
 
-  Widget _bodyWidget({required int mode}) {
+  Widget _bodyWidget({required int mode, required TimerScheduleState state}) {
     if (mode == 0) {
+      if (state is Loading)
+        return Center(
+          child: CustomLoadingWidget(),
+        );
       return _timerWidget();
     } else {
       return Padding(
@@ -327,8 +332,8 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
           builder: (context, state) {
             return TabBarView(
               controller: _controller,
-              children: List.generate(
-                  _controller.length, (index) => _bodyWidget(mode: index)),
+              children: List.generate(_controller.length,
+                  (index) => _bodyWidget(mode: index, state: state)),
             );
           },
         ));

@@ -40,10 +40,15 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
         case EventType.nuAckDelTimer:
           break;
         case EventType.nuAckTimer:
+          timerStarted = true;
+          emit(Empty());
           break;
         case EventType.unschAck:
           break;
         case EventType.nuTimerDone:
+          timerSelectedTime = null;
+          timerStarted = false;
+          emit(Empty());
           break;
         case EventType.unDelSchedAck:
           break;
@@ -107,6 +112,7 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
   }
 
   void addTimer({required DateTime time}) {
+    emit(Loading());
     String timerID =
         ((time.hour * 3600) * (time.minute * 60) + (time.second)).toString();
     log('''
@@ -138,15 +144,4 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
 //     "Timer": "K2_1-02:25:10"
 // }
 // ```
-//   {
-//     "Type": "U-Sch",
-//     "NodeID": "KEY-CH4-645358",
-//     "Token": "<the-token-received-when-node-registration>",
-  // "Schedule": "FR-11-18-22",
-  // "SchedID": 1265,
-//     "Action": {
-//         "Key": "K1_1,K2_0,K4_1",
-//         "PWM": 88
-//     }
-// }
 }
