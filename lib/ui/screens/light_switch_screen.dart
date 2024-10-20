@@ -152,7 +152,6 @@ class _LightSwitchScreenState extends State<LightSwitchScreen> {
                                 Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => SwitchPick(
                                 device: widget.device,
-                                client: _cubit.client,
                               ),
                             )),
                             child: Ink(

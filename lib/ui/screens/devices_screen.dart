@@ -79,7 +79,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                       builder: (context) => BlocProvider(
                                         create: (context) =>
                                             control.DeviceControlCubit(
-                                                client: _cubit.client,
                                                 device: Utils.deviceList[index],
                                                 topic:
                                                     "users/${Utils.username}"),

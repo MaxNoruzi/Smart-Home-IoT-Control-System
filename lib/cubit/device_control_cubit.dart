@@ -10,15 +10,13 @@ import 'package:iot_project/utils/utils.dart';
 part 'device_control_state.dart';
 
 class DeviceControlCubit extends Cubit<DeviceControlState> {
-  DeviceControlCubit(
-      {required this.client, required this.topic, required this.device})
+  DeviceControlCubit({required this.topic, required this.device})
       : super(Loading()) {
-    if (!client.functionExist(onListen)) {
-      client.addFunction(onListen);
+    if (!Utils.client.functionExist(onListen)) {
+      Utils.client.addFunction(onListen);
     }
   }
   Device device;
-  late MqttService client;
   Set<int> loadingList = {};
   String topic; // "users/" + Utils.username
   @override
@@ -74,7 +72,7 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
     required Device device,
     required int value,
   }) {
-    client.publish(topic, '''
+    Utils.client.publish(topic, '''
     {
     "Type": "Event",
     "NodeID": "${device.nodeID}",
@@ -100,7 +98,7 @@ class DeviceControlCubit extends Cubit<DeviceControlState> {
 //         "EventValue": "${state ? "ON" : "OFF"}"
 //     }
 // }''');
-    client.publish(topic, '''{
+    Utils.client.publish(topic, '''{
     "Type": "Event",
     "NodeID": "${device.nodeID}",
     "Token": "${device.token}",

@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/home_page_screen.dart';
 import 'package:iot_project/ui/screens/login_screen.dart';
+import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,6 +34,11 @@ void main() async {
       // Utils.lastLoginDate = DateTime.parse(Utils.infoBox.get("lastLoginDate"));
     }
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {};
+    Utils.client = MqttService(
+        broker: "212.23.201.244",
+        clientId: "sadasdas",
+        onConnected: () {},
+        onDisconnected: () {});
     runApp(MyApp());
   }, (error, stackTrace) {
     print(error.toString() + stackTrace.toString() + deviceData.toString());

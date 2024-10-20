@@ -5,24 +5,25 @@ import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
 import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/model/schedule_model.dart';
-import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:meta/meta.dart';
 
 part 'timer_schedule_state.dart';
 
 class TimerScheduleCubit extends Cubit<TimerScheduleState> {
-  TimerScheduleCubit(
-      {required this.device, required this.keyNumber, required this.client})
+  TimerScheduleCubit({required this.device, required this.keyNumber})
       : super(TimerScheduleInitial()) {
-    client.addFunction(onListen);
+    Utils.client.addFunction(onListen);
   }
-
+  @override
+  Future<void> close() {
+    Utils.client.removeFunction(onListen);
+    return super.close();
+  }
   Device device;
   int keyNumber;
   DateTime? timerSelectedTime;
   bool timerStarted = false;
-  late MqttService client;
   // "users/" + Utils.username
   @override
   void emit(TimerScheduleState state) {
@@ -98,7 +99,7 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
         "Key": "K${keyNumber}_${model.state ? 1 : 0}"
     }
     }''');
-    client.publish(Utils.topic, '''
+    Utils.client.publish(Utils.topic, '''
     {
     "Type": "U-Sch",
     "NodeID": "${device.nodeID}",
@@ -124,7 +125,7 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     "Timer": "K${keyNumber}_1-${time.hour}:${time.minute}:${time.second}"
 }
 ''');
-    client.publish(Utils.topic, '''
+    Utils.client.publish(Utils.topic, '''
 {
     "Type": "U-Timer",
     "NodeID": "${device.nodeID}",

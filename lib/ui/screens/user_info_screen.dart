@@ -5,6 +5,41 @@ class InfoScreen extends StatelessWidget {
   const InfoScreen({
     Key? key,
   }) : super(key: key);
+  void showLogoutConfirmationDialog(
+      {required BuildContext context, required Function logoutFunction}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        title: Text('Confirm Logout',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(
+          'Are you sure you want to log out?',
+          style: TextStyle(fontSize: 16.0),
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(fontSize: 16.0),
+            ),
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(fontSize: 16.0),
+            ),
+            child: Text('Logout'),
+            onPressed: () {
+              logoutFunction();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +74,10 @@ class InfoScreen extends StatelessWidget {
               title: Text('Logout'),
               leading: Icon(Icons.exit_to_app),
               onTap: () {
-                Utils.logout(context: context);
+                showLogoutConfirmationDialog(
+                    context: context,
+                    logoutFunction: () => Utils.logout(context: context));
+                // Utils.logout(context: context);
               },
             ),
             Divider(),

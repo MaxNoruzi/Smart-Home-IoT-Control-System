@@ -16,16 +16,16 @@ part 'devices_screen_state.dart';
 
 class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   DevicesScreenCubit() : super(Loading()) {
-    client = MqttService(
-        broker: "212.23.201.244",
-        clientId: "sadasdas",
-        onConnected: onConnected,
-        onDisconnected: onDisconnected);
-    // client.setOnConnected(onConnected);
-    // client.setOnDisconnected(onDisconnected);
+    // client = MqttService(
+    //     broker: "212.23.201.244",
+    //     clientId: "sadasdas",
+    //     onConnected: onConnected,
+    //     onDisconnected: onDisconnected);
+    Utils.client.setOnConnected(onConnected);
+    Utils.client.setOnDisconnected(onDisconnected);
     fetchDevices();
   }
-  late final MqttService client;
+  // late final MqttService client;
   bool onceRefreshed = false;
   @override
   void emit(DevicesScreenState state) {
@@ -35,20 +35,19 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   @override
   Future<void> close() {
     onceRefreshed = true;
-
-    client.client.disconnect();
-    if (client.functionExist(onListen)) {
-      client.removeFunction(onListen);
+    Utils.client.client.unsubscribe("users/" + Utils.username);
+    if (Utils.client.functionExist(onListen)) {
+      Utils.client.removeFunction(onListen);
     }
     return super.close();
   }
 
   void _startClient() async {
-    if (!this.client.isConnected()) {
-      await client.connect();
+    if (!Utils.client.isConnected()) {
+      await Utils.client.connect();
       subscribeToTopic();
-      if (!client.functionExist(onListen)) {
-        client.addFunction(onListen);
+      if (!Utils.client.functionExist(onListen)) {
+        Utils.client.addFunction(onListen);
       }
     }
     fetchStatus();
@@ -88,7 +87,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   }
 
   void subscribeToTopic({String? topic}) {
-    client.subscribe(topic ?? ("users/" + Utils.username));
+    Utils.client.subscribe(topic ?? ("users/" + Utils.username));
   }
 
   void onConnected() {
@@ -133,7 +132,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   }
 
   void fetchStatus({String? topic}) {
-    client.publish(topic ?? ("users/" + Utils.username), '''{
+    Utils.client.publish(topic ?? ("users/" + Utils.username), '''{
     "Type": "RUU"
     }''');
   }

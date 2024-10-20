@@ -7,9 +7,8 @@ import 'package:iot_project/ui/screens/timer_schedule_screen.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 
 class SwitchPick extends StatefulWidget {
-  SwitchPick({super.key, required this.device, required this.client});
+  SwitchPick({super.key, required this.device});
   Device device;
-  MqttService client;
   @override
   State<SwitchPick> createState() => _SwitchPickState();
 }
@@ -37,7 +36,7 @@ class _SwitchPickState extends State<SwitchPick> {
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlocProvider(
                         create: (context) => TimerScheduleCubit(
-                            client: widget.client,
+          
                             device: widget.device,
                             keyNumber: index),
                         child: TimerScheduleScreen(),
