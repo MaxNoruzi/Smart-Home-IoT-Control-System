@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,21 +6,26 @@ import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/model/error_model.dart';
 import 'package:iot_project/model/receive_model.dart';
 import 'package:iot_project/model/schedule_model.dart';
+import 'package:iot_project/utils/appApi.dart';
+import 'package:iot_project/utils/consts.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:meta/meta.dart';
-
 part 'timer_schedule_state.dart';
 
 class TimerScheduleCubit extends Cubit<TimerScheduleState> {
   TimerScheduleCubit({required this.device, required this.keyNumber})
       : super(TimerScheduleInitial()) {
     Utils.client.addFunction(onListen);
+    getSchedulesApi();
   }
   @override
   Future<void> close() {
     Utils.client.removeFunction(onListen);
     return super.close();
   }
+
+  List<ScheduleModel> schedules = [];
+  List<ScheduleModel> mainSchedules = [];
   Device device;
   int keyNumber;
   DateTime? timerSelectedTime;
@@ -35,7 +41,6 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     try {
       // event = await compute(
       //     (message) => BaseEvent.fromJson(jsonDecode(message)), model.input);
-
       // BaseEvent.fromJson(jsonDecode(model.input));
       switch (event.eventType) {
         case EventType.nuAckDelTimer:
@@ -45,6 +50,22 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
           emit(Empty());
           break;
         case EventType.unschAck:
+          if (schedules
+              .where(
+                  (element) => element.schedID == (event as UNSchAck).schedID)
+              .isNotEmpty) {
+            schedules
+                .where(
+                    (element) => element.schedID == (event as UNSchAck).schedID)
+                .first
+                .isActive = true;
+            addScheduleApi(
+                model: schedules
+                    .where((element) =>
+                        element.schedID == (event as UNSchAck).schedID)
+                    .first);
+            emit(Empty());
+          }
           break;
         case EventType.nuTimerDone:
           timerSelectedTime = null;
@@ -78,7 +99,41 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
     return value - 1;
   }
 
+  void addScheduleApi({required ScheduleModel model}) {
+    AppApi.instance.postApi(
+      url: "$baseApiUrl/api/set_schedule/",
+      body: model.toJson(),
+      onSuccess: (response) {
+        print(response);
+      },
+      onError: (error) {
+        print(error);
+      },
+    );
+  }
+
+  void getSchedulesApi() {
+    emit(Loading());
+    AppApi.instance.getApi(
+      url: "$baseApiUrl/api/get_schedule/",
+      queryParameters: {"nodeID": device.nodeID},
+      onSuccess: (response) {
+        List<dynamic> temp = jsonDecode(response)["data"];
+        mainSchedules..clear();
+        temp.forEach((element) {
+          mainSchedules.add(ScheduleModel.fromJson(element));
+        });
+        emit(Empty());
+      },
+      onError: (error) {
+        print(error);
+        emit(Error(error: error, onCall: getSchedulesApi));
+      },
+    );
+  }
+
   void addSchedule({required ScheduleModel model}) {
+    schedules.add(model);
     int SchedID = (model.time.hour * 3600) * (model.time.minute * 60) +
         (model.weekDays
             .fold(0, (previousValue, element) => previousValue + element));
@@ -88,17 +143,19 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
           changeStartSunday(model.weekDays[i]).toString() +
           ((i < model.weekDays.length - 1) ? "," : "");
     }
-    log('''
-    {
-    "Type": "U-Sch",
-    "NodeID": "${device.nodeID}",
-    "Token": "${device.token}",
-    "Schedule": "($ScheduleTxt)-${model.time.toUtc().hour}-${model.time.toUtc().minute}",
-    "SchedID": $SchedID,
-    "Action": {
-        "Key": "K${keyNumber}_${model.state ? 1 : 0}"
-    }
-    }''');
+    model.schedID = SchedID;
+
+    // log('''
+    // {
+    // "Type": "U-Sch",
+    // "NodeID": "${device.nodeID}",
+    // "Token": "${device.token}",
+    // "Schedule": "($ScheduleTxt)-${model.time.toUtc().hour}-${model.time.toUtc().minute}",
+    // "SchedID": $SchedID,
+    // "Action": {
+    //     "Key": "K${keyNumber}_${model.state ? 1 : 0}"
+    // }
+    // }''');
     Utils.client.publish(Utils.topic, '''
     {
     "Type": "U-Sch",
@@ -135,14 +192,4 @@ class TimerScheduleCubit extends Cubit<TimerScheduleState> {
 }
 ''');
   }
-
-//   ```
-// {
-//     "Type": "U-Timer",
-//     "NodeID": "KEY-CH4-65325648976543",
-//     "Token": "dajwkdnakwjodip12qjdnjbnalmksdOJNSLKhskljdhbh",
-//     "TimerID": 52260,
-//     "Timer": "K2_1-02:25:10"
-// }
-// ```
 }

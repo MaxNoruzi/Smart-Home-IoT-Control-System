@@ -18,6 +18,7 @@ class Utils {
   static late String password;
   static late MqttService client;
   static late String topic;
+  static IOClient? sslClient;
   static void confrimLogin({required String user, required String pass}) {
     username = user;
     password = pass;
@@ -28,38 +29,45 @@ class Utils {
     Utils.infoBox.put("lastLoginDate", DateTime.now().toIso8601String());
   }
 
-  static Future<http.Client> createHttpClientWithCertificate() async {
-    final SecurityContext context = SecurityContext(withTrustedRoots: true);
+//   static Future<http.Client> createHttpClientWithCertificate() async {
+//     if (sslClient != null) return await Future.value(sslClient);
+//     final SecurityContext context = SecurityContext(withTrustedRoots: true);
 
-    // Load the certificate
-    const String pem = """
------BEGIN CERTIFICATE-----
-MIICpTCCAY2gAwIBAgIBATANBgkqhkiG9w0BAQsFADANMQswCQYDVQQDEwJDQTAe
-Fw0yNDA4MTUwMDAwMDBaFw0zNDA4MTQyMzU5NTlaMA0xCzAJBgNVBAMTAkNBMIIB
-IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6bpS/ItjK8iFec+noI927oAb
-QDyrclhy7BIL9xZb4NT+DayYmH115UdoOZsMKC2n+3cqxv1XrvgZVUnsxQC4gmYO
-aXz2BwO2wiQTAGoIC4IhR9VSr/QzQjT/YfBxyr6fenufTVyco0FDyZM208wCCiSP
-JtTcPlgmN7QBGLrg5hnE+ZV3JSvXbe9pY2Mtsy/6jyfP0D/zD+xWVp+fDb8cAOON
-ZPtDpamWN/qCVvB0+tYybV9BdtFQ8otKPJKY75P1svNy4yd5ZgQfrUEDaBg3gZ4y
-z86n7hJK92GgEY0tVugYhXnwMxAoug+u28BfckKdPDqZ6SAgY3Z1V478J37w0QID
-AQABoxAwDjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBEH0S4x1ij
-2J+zc6UGnQci7+Vs4N1DYAVdQP4bE2tAhe5UrMcL/WGDdBZFlWbYMheNecm0CD9U
-7l3EWhA2JYTcpBo0sx0lqWgO1PCxffymb3hCpgEOPN7eevxQCk6pUHlEB52tON2W
-cBhyqABG0Bv0P0CLHEJ0dcG/8Vjdw/GW1yX5QVkRt4zbbkbIhAR+Gr4wanx6NA5B
-OxvsN3P/LmsS8Om8a3jgOPRVjfXt2A+FDiZaLr9Y+Eyb/yE7dr2y9QwjGbEbyX3e
-eBM0xK3mPDtvrMuEYKKWp3VAib2GOfB/PnPf/x2dkH/x6FxfWVN55FRwz8ZgSI0z
-FkkwOvXaJwR8
------END CERTIFICATE-----
-""";
+//     // Load the certificate
+//     const String pem = """
+// -----BEGIN CERTIFICATE-----
+// MIIDnTCCAoWgAwIBAgIUDJeVZD1MhJhgV5we5JNgmYeARi0wDQYJKoZIhvcNAQEL
+// BQAwaDELMAkGA1UEBhMCSVIxETAPBgNVBAgMCEtob3Jhc2FuMRAwDgYDVQQHDAdN
+// YXNoaGFkMQ8wDQYDVQQKDAZTb2xhbmExDzANBgNVBAsMBnNvbGFuYTESMBAGA1UE
+// AwwJbG9jYWxob3N0MCAXDTI0MDkyNzEwMDczOVoYDzIxMjQwOTAzMTAwNzM5WjBo
+// MQswCQYDVQQGEwJJUjERMA8GA1UECAwIS2hvcmFzYW4xEDAOBgNVBAcMB01hc2ho
+// YWQxDzANBgNVBAoMBlNvbGFuYTEPMA0GA1UECwwGc29sYW5hMRIwEAYDVQQDDAls
+// b2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDFffKjQdL6
+// dO1qXTGprxN2s6tjel4xi9XBzkRquf7HMOopyzH3DzBwyI9v5+GLfd2X31p2PCTz
+// 7smehgREWuNR2LtyGyoUdAy28sOdpq5eTN/2nCDGH97rgwYNrpdJR9BworGi5n3J
+// XaD4L/PptfzBGw5tupHLlOJUWPAQzxb3iZckKI1w/6tvrjraRz23n4gBFi94Ribb
+// B6uaXhFWdr8FeKzzmnwRHMu12+Tf6RPH/4EkDIE7hL/c8XlXVnKu+w6KYMh6p19h
+// DIt39PawYvENi1P+xT4duooB8URaAE2aql38YzImJTAtBwoK/C6Na1/mcG5JdtkB
+// rwJVYVKb+8kXAgMBAAGjPTA7MBoGA1UdEQQTMBGCCWxvY2FsaG9zdIcE1BfJ9DAd
+// BgNVHQ4EFgQUEdH20LqjIVsbfbxc6ZJ4Q2iSIKQwDQYJKoZIhvcNAQELBQADggEB
+// AIHWnBKMMDeArgkwc1fY53/7h83+rlDQVyEVU7uKbipzmh4fO+Ht523i1RXDyv0b
+// H0hWMRpqAebhW47woIALFlrXKGiwakSDfmyrlgHmadkavOxe+8yMIxmKrSAk6X8w
+// 3jc0iF9eUjSVyhXktO2wm0R1/hxix9ynXmCsLj3ozRyVJRJ+7QXxgzD6wS/roRvU
+// 9c2FXX0lkjXATkecJOzQ71gE9s5CSAJJbdsKM0S9Z7rz7kQt6YMmJfRvm7oQ1xzo
+// 3YZTSc0N8fcVZyO0UVGdf4L6ewsbuto2o/HtmZ4M8fVr3s6k3/LdD7N96SSsKoVk
+// DB93Ga9Bl0g17X6VUWPMVYc=
+// -----END CERTIFICATE-----
+// """;
 
-    context.setTrustedCertificatesBytes(utf8.encode(pem));
+//     context.setTrustedCertificatesBytes(utf8.encode(pem));
 
-    final httpClient = HttpClient(context: context);
-    httpClient.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
+//     final httpClient = HttpClient(context: context);
+//     httpClient.badCertificateCallback =
+//         (X509Certificate cert, String host, int port) => true;
 
-    return IOClient(httpClient);
-  }
+//     sslClient = IOClient(httpClient);
+//     return IOClient(httpClient);
+//   }
 
   static Future<bool> requestPermission(
       {required Permission permission}) async {

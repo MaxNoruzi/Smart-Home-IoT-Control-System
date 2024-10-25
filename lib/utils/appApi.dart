@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:iot_project/model/error_model.dart';
 import 'package:iot_project/utils/consts.dart';
 
@@ -21,6 +23,27 @@ class AppApi {
       connectTimeout: const Duration(seconds: 90),
     ),
   );
+  void afterDioCreate() async {
+    ByteData clientCertificate =
+        await rootBundle.load("assets/Certificates/cert.pem");
+    ByteData privateKey = await rootBundle.load("assets/Certificates/key.pem");
+    ByteData rootCACertificate =
+        await rootBundle.load("assets/Certificates/cert.pem");
+    _dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final SecurityContext scontext = SecurityContext();
+        scontext.setTrustedCertificatesBytes(
+            rootCACertificate.buffer.asUint8List());
+        scontext.usePrivateKeyBytes(privateKey.buffer.asUint8List());
+        scontext
+            .useCertificateChainBytes(clientCertificate.buffer.asUint8List());
+
+        HttpClient client = HttpClient(context: scontext);
+
+        return client;
+      },
+    );
+  }
 
   void _onErrorCatch({
     required Object e,
@@ -29,32 +52,7 @@ class AppApi {
   }) async {
     if (e is DioException) {
       if (e.response != null) {
-        // if (kDebugMode) {
-        if (e.response!.statusCode == 401) {
-          // postApi(
-          //     body: {
-          //       "client_id": "sMUGJXg7FBFEmMVwlr5EDe4XXELx7EWLqzc5FWuK",
-          //       "refresh_token": Utils.auth!.refreshToken
-          //     },
-          //     url: "$baseApiUrl/api/v2/login/refresh/",
-          //     onSuccess: (response) {
-          //       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(response)['data']);
-          //       Utils.user = authResponse.user;
-          //       Utils.auth = authResponse.auth;
-          //       Utils.infoBox.put("loggedIn", true);
-          //       Utils.infoBox.put("auth", authResponse.auth);
-          //       Utils.infoBox.put("userModel", Utils.user);
-          //       Utils.infoBox.put("lastLoginDate", DateTime.now().toIso8601String());
-          //       onError!(ErrorModel(title: "try again", errorStatus: ErrorStatus.none));
-          //     },
-          //     onError: (error) {
-          //       onError!(ErrorModel(
-          //         title: error.title,
-          //         errorStatus: error.errorStatus,
-          //       ));
-          //       // print("this is cubit" + error.title);
-          //     });
-        } else if (e.response!.statusCode == 400) {
+        if (e.response!.statusCode == 400) {
           onError!(ErrorModel(
               title: e.response!.data, errorStatus: ErrorStatus.showErrorText));
         } else {
@@ -208,7 +206,7 @@ class AppApi {
       List<Duration> retryDelays = [];
 
       for (int i = 0; i < retryNumber; i++) {
-        retryDelays.add(Duration(seconds:  1));
+        retryDelays.add(Duration(seconds: 1));
       }
 
       _dio.interceptors.add(RetryInterceptor(
@@ -293,11 +291,13 @@ class AppApi {
         if (onSuccess != null) {
           // onSuccess(response.data);
           await Future.sync(() => onSuccess(response.data));
+          return null;
         }
       } else {
         if (onError != null) {
           onError(ErrorModel(
               title: "سرور در دسترس نیست .", errorStatus: ErrorStatus.server));
+          return null;
         }
       }
     } catch (e) {

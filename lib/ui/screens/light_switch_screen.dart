@@ -141,34 +141,47 @@ class _LightSwitchScreenState extends State<LightSwitchScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => SwitchPick(
-                                device: widget.device,
-                              ),
-                            )),
-                            child: Ink(
-                              decoration: ShapeDecoration(
-                                shape: CircleBorder(),
-                              ),
-                              child: Icon(Icons.timer_sharp),
-                            ),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SwitchPick(
+                            device: widget.device,
                           ),
-                          Text(
-                            "Timer",
-                            style: TextStyle(fontSize: 10),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                        ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(300, 50)
+                        ,foregroundColor: Colors.white,
+                        backgroundColor: Colors.black
+                      ),
+                      child: Text(
+                        "Timer & Schedule",
+                        style: TextStyle(fontSize: 10),
+                      )),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Row(
+                  //       children: [
+                  //         InkWell(
+                  //           borderRadius: BorderRadius.circular(12),
+                  //           onTap: () =>
+                  //               Navigator.of(context).push(MaterialPageRoute(
+                  //             builder: (context) => SwitchPick(
+                  //               device: widget.device,
+                  //             ),
+                  //           )),
+                  //           child: Ink(
+                  //             decoration: ShapeDecoration(
+                  //               shape: CircleBorder(),
+                  //             ),
+                  //             child: Icon(Icons.timer_sharp),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )
+                  //   ],
+                  // ),
                 )
               ],
             );

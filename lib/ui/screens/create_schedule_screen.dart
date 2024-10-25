@@ -14,7 +14,8 @@ class CreateScheduleScreen extends StatefulWidget {
     required this.device,
     ScheduleModel? newModel,
   }) {
-    model = ScheduleModel.fromJson(newModel?.toJson() ?? {});
+    model =
+        ScheduleModel.fromJson(newModel?.toJson() ?? {"nodeID": device.nodeID});
     for (var i = 0; i < _days.length; i++) {
       if (model.weekDays.contains(_days[i].dayKey)) {
         _days[i].isSelected = true;

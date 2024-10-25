@@ -126,13 +126,13 @@ class _ScannerState extends State<Scanner> {
 
   Future<void> _getScannedResults(BuildContext context) async {
     // Check if Wi-Fi is enabled
-    int? iWiFiState;
-    WIFI_AP_STATE? wifiAPState;
+    // int? iWiFiState;
+    // WIFI_AP_STATE? wifiAPState;
     bool enabled = false;
     try {
       enabled = await WiFiForIoTPlugin.isEnabled();
     } on Exception {
-      iWiFiState = WIFI_AP_STATE.WIFI_AP_STATE_FAILED.index;
+      // iWiFiState = WIFI_AP_STATE.WIFI_AP_STATE_FAILED.index;
     }
     if (!enabled) {
       _showWarningDialog(
@@ -160,15 +160,20 @@ class _ScannerState extends State<Scanner> {
   }
 
   void _stopListeningToScanResults() {
+    try {
+      WiFiForIoTPlugin.forceWifiUsage(false);
+    } catch (e) {
+      print(e);
+    }
     subscription?.cancel();
     setState(() => subscription = null);
   }
 
   @override
   void dispose() {
+    _stopListeningToScanResults();
     super.dispose();
     // stop subscription for scanned results
-    _stopListeningToScanResults();
   }
 
   @override
@@ -393,7 +398,7 @@ class _AccessPointTile extends StatelessWidget {
                                 backgroundColor: Colors.blueGrey,
                                 elevation: 5.0,
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 // Create a new WiFiConfig object with updated values
                                 final updatedWiFiConfig = WiFiConfig(
                                   wifiSSID: ssidController.text,
@@ -404,6 +409,7 @@ class _AccessPointTile extends StatelessWidget {
                                 // Pass the updated object to the callback
                                 onConfirm(updatedWiFiConfig);
                                 // Close the bottom sheet
+
                                 Navigator.pop(context);
                               },
                               child: Text(
@@ -552,6 +558,7 @@ class _AccessPointTile extends StatelessWidget {
         joinOnce: false,
         security: NetworkSecurity.WPA);
     bool isForce = await WiFiForIoTPlugin.forceWifiUsage(true);
+
     print(isForce);
     if (isConnected) {
       ScaffoldMessenger.of(context).showSnackBar(

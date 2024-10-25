@@ -7,6 +7,7 @@ import 'package:iot_project/ui/screens/light_switch_screen.dart';
 import 'package:iot_project/ui/widgets/custom_loading_widget.dart';
 import 'package:iot_project/ui/widgets/custom_error.dart';
 import 'package:iot_project/ui/widgets/device_widget.dart';
+import 'package:iot_project/utils/appApi.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -42,6 +43,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           Utils.kShowSnackBar(context,
                               "Configuration of device has been successfull, you can connect to desired Wifi now.");
                         }
+                     
                       });
                     },
                     icon: const Icon(

@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/home_page_screen.dart';
 import 'package:iot_project/ui/screens/login_screen.dart';
+import 'package:iot_project/utils/appApi.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,6 +40,7 @@ void main() async {
         clientId: "sadasdas",
         onConnected: () {},
         onDisconnected: () {});
+    AppApi.instance.afterDioCreate();
     runApp(MyApp());
   }, (error, stackTrace) {
     print(error.toString() + stackTrace.toString() + deviceData.toString());
