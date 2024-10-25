@@ -87,11 +87,34 @@ class Utils {
   }
 
   /// Show snackbar.
-  static void kShowSnackBar(BuildContext context, String message) {
-    if (kDebugMode) print(message);
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+  static void showSnackBar(
+      {required BuildContext context,
+      required String txt,
+      Function? afterSnack,
+      int? sec,
+      int? milliseconds}) {
+    Future.delayed(Duration.zero).then((value) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+
+            // margin: EdgeInsets.fromLTRB(0, 0, 0, 300),
+            content: ConstrainedBox(
+                constraints: BoxConstraints.loose(Size(double.infinity, 100)),
+                child: Text(
+                    txt == "check your connection"
+                        ? "اتصال خود به اینترنت را بررسی فرمایید."
+                        : txt,
+                    textAlign: TextAlign.center)),
+            duration:
+                Duration(seconds: sec ?? 1, milliseconds: milliseconds ?? 500),
+            behavior: SnackBarBehavior.floating),
+      );
+    }).then((value) {
+      if (afterSnack != null) {
+        afterSnack();
+      }
+    });
   }
   // NumberFormat('#.##',"fa").format(1312321)
   // static bool isLoggedIn = false;

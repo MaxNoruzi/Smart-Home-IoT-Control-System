@@ -10,6 +10,7 @@ import 'package:iot_project/model/schedule_model.dart';
 import 'package:iot_project/ui/screens/create_schedule_screen.dart';
 import 'package:iot_project/ui/widgets/custom_error.dart';
 import 'package:iot_project/ui/widgets/custom_loading_widget.dart';
+import 'package:iot_project/utils/utils.dart';
 
 class TimerScheduleScreen extends StatefulWidget {
   const TimerScheduleScreen({super.key});
@@ -65,13 +66,13 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
   Widget _timerWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: _cubit.timerStarted
+      children: _cubit.currentTimer != null
           ? [
               CircularCountDownTimer(
                 duration: Duration(
-                        hours: _cubit.timerSelectedTime!.hour,
-                        minutes: _cubit.timerSelectedTime!.hour,
-                        seconds: _cubit.timerSelectedTime!.second)
+                        hours: _cubit.currentTimer!.timer.hour,
+                        minutes: _cubit.currentTimer!.timer.minute,
+                        seconds: _cubit.currentTimer!.timer.second)
                     .inSeconds,
                 initialDuration: 0,
                 controller: CountDownController(),
@@ -113,7 +114,7 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
               ),
               IconButton(
                   onPressed: () {
-                    _cubit.timerStop();
+                    _cubit.removeTimer(model: _cubit.currentTimer!);
                   },
                   icon: Icon(
                     Icons.stop_circle_outlined,
@@ -263,6 +264,41 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
   //   );
 
   // }
+  void showLogoutConfirmationDialog(
+      {required BuildContext context, required Function logoutFunction}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        title: Text('Confirm delete',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(
+          'Are you sure you want to delete this schedule?',
+          style: TextStyle(fontSize: 16.0),
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(fontSize: 16.0),
+            ),
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(fontSize: 16.0),
+            ),
+            child: Text('Delete'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              logoutFunction();
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _bodyWidget({required int mode, required TimerScheduleState state}) {
     // 0 is for timer
@@ -303,38 +339,64 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    DateFormat('hh:mm').format(
+                                                        _cubit
+                                                            .mainSchedules[
+                                                                index]
+                                                            .time
+                                                            .toLocal()),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleLarge,
+                                                  ),
+                                                ],
+                                              ),
                                               Text(
-                                                DateFormat('hh:mm').format(_cubit
-                                                    .mainSchedules[index].time
-                                                    .toLocal()),
+                                                _weekDaysString(
+                                                    weeks: _cubit
+                                                        .mainSchedules[index]
+                                                        .weekDays),
+                                                // DateFormat('hh:mm').format(_cubit
+                                                //     .mainSchedules[index].time
+                                                //     .toLocal()
+                                                // ),
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .titleLarge,
+                                                    .titleSmall,
                                               ),
+                                              Text("Switch state: " +
+                                                  (_cubit.mainSchedules[index]
+                                                          .state
+                                                      ? "On"
+                                                      : "Off"))
                                             ],
                                           ),
-                                          Text(
-                                            _weekDaysString(
-                                                weeks: _cubit.mainSchedules[index]
-                                                    .weekDays),
-                                            // DateFormat('hh:mm').format(_cubit
-                                            //     .mainSchedules[index].time
-                                            //     .toLocal()
-                                            // ),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall,
-                                          ),
-                                          Text("Switch state: " +
-                                              (_cubit.mainSchedules[index].state
-                                                  ? "On"
-                                                  : "Off"))
+                                          IconButton(
+                                              onPressed: () {
+                                                showLogoutConfirmationDialog(
+                                                    context: context,
+                                                    logoutFunction: () {
+                                                      _cubit.deleteSchedule(
+                                                          model: _cubit
+                                                                  .mainSchedules[
+                                                              index]);
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.delete_outlined,
+                                                color: Colors.red,
+                                              ))
                                         ],
                                       ),
                                     ),
@@ -417,6 +479,11 @@ class _TimerSchduleScreenState extends State<TimerScheduleScreen>
             if (state is Loading) return CustomLoadingWidget();
             if (state is Error)
               return CustomError(error: state.error, onCall: state.onCall);
+            if (state is ScaffoldError)
+              Utils.showSnackBar(
+                  context: context,
+                  txt: state.message,
+                  afterSnack: _cubit.empty);
             return TabBarView(
               controller: _controller,
               children: List.generate(_controller.length,

@@ -90,7 +90,9 @@ class _ScannerState extends State<Scanner> {
         switch (can) {
           case CanGetScannedResults.notSupported:
             if (context.mounted) {
-              Utils.kShowSnackBar(context, "Cannot get scanned results: $can");
+              Utils.showSnackBar(
+                  context: context, txt: "Cannot get scanned results: $can");
+              // Utils.kShowSnackBar(context, "Cannot get scanned results: $can");
             }
             break;
           case CanGetScannedResults.noLocationServiceDisabled:
@@ -592,7 +594,9 @@ class _AccessPointTile extends StatelessWidget {
                 onError: (error) {
                   // Utils.kShowSnackBar(
                   //     context, "Something went wrong please try again.");
-                  Utils.kShowSnackBar(context, error.title.toString());
+                  Utils.showSnackBar(
+                      context: context, txt: error.title.toString());
+                  // Utils.kShowSnackBar(context, error.title.toString());
                 },
               );
             },
@@ -601,7 +605,8 @@ class _AccessPointTile extends StatelessWidget {
         onError: (error) {
           // Utils.kShowSnackBar(
           //     context, "Something went wrong please try again.");
-          Utils.kShowSnackBar(context, error.title.toString());
+          Utils.showSnackBar(context: context, txt: error.title.toString());
+          // Utils.kShowSnackBar(context, error.title.toString());
         },
       );
     } else {

@@ -40,10 +40,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
                       ))
                           .then((value) {
                         if (value != null && value == true) {
-                          Utils.kShowSnackBar(context,
-                              "Configuration of device has been successfull, you can connect to desired Wifi now.");
+                          Utils.showSnackBar(
+                              context: context,
+                              txt:
+                                  "Configuration of device has been successfull, you can connect to desired Wifi now.");
+                          // Utils.showSnackBar(context,
+                          //     "Configuration of device has been successfull, you can connect to desired Wifi now.");
                         }
-                     
                       });
                     },
                     icon: const Icon(
