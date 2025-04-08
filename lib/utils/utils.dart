@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/io_client.dart';
@@ -84,28 +83,7 @@ class Utils {
     4) "loggedOnce" : determine that user logged once in app but right now he may or may not be logged in
     */
 
-  // static User? user;
-  // static Auth? auth;
-  // static late AndroidDeviceInfo? androidInfo;
-  // static final MyLocalization _myLocalization = MyLocalization();
-  // static MyLocalizationDelegate myLocalizationDelegate = MyLocalizationDelegate(_myLocalization);
-  // static ReceiveTypes stringToEnum(String type) {
-  //   switch (type) {
-  //     case "UserAckKey":
-  //       return ReceiveTypes.ACK;
-  //     case "Event":
-  //       return ReceiveTypes.EVENT;
-
-  //     case "Sample":
-  //       return ReceiveTypes.SAMPLE;
-
-  //     default:
-  //       return ReceiveTypes.SAMPLE;
-  //   }
-  // }
   static void logout({required BuildContext context}) async {
-    // Utils.isLoggedIn = false;
-    // await Utils.infoBox.put("loginInfo", false);
     await Utils.infoBox.put("loggedIn", false);
     if (context.mounted) Navigator.of(context).pushReplacementNamed("/login");
   }

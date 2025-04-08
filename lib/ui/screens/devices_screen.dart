@@ -98,51 +98,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 },
                               ),
                             ),
-                          )
-                //  Column(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     children: List.generate(
-                //         Utils.deviceList.length,
-                //         (index) => DeviceWidget(
-                //               device: Utils.deviceList[index],
-                //               onTap: () {
-                //                 if (Utils.deviceList[index].keys
-                //                         .first !=
-                //                     -1) {
-                //                   Navigator.of(context)
-                //                       .push(MaterialPageRoute(
-                //                     builder: (context) =>
-                //                         BlocProvider(
-                //                       create: (context) =>
-                //                           control.DeviceControlCubit(
-                //                               client: _cubit.client,
-                //                               device: Utils
-                //                                   .deviceList[index],
-                //                               topic:
-                //                                   "users/${Utils.username}"),
-                //                       child: LightSwitchScreen(
-                //                           device: Utils
-                //                               .deviceList[index]),
-                //                     ),
-                //                   ));
-                //                 }
-
-                //                 // _cubit.changeModule(
-                //                 //   device: Utils.deviceList[index])
-                //               },
-                //             )
-                //         // GestureDetector(
-                //         //     onTap: () {
-                //         //       _cubit.changeModule(
-                //         //           device: Utils.deviceList[index]);
-                //         //     },
-                //         //     child:
-                //         //         Text(Utils.deviceList[index].nodeID))
-
-                //         ),
-                //   ),
-
-                )
+                          ))
           ],
         );
       },
