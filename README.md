@@ -1,16 +1,33 @@
-# iot_project
+# 🌐 Smart Home IoT Control System
 
-A new Flutter project.
+A **Flutter/Dart-based IoT application** for smart home automation, enabling seamless control and real-time monitoring of connected devices using the **MQTT protocol**. Built from scratch in just two weeks, this cross-platform app empowers users to manage switches, lights, and other smart devices with ease.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+- 💡 **Control smart switches and lights** individually or in groups  
+- 📅 **Define scenarios** to trigger multiple devices simultaneously  
+- ⏰ **Set timers** to automate on/off scheduling  
+- 📡 **Real-time state monitoring** using MQTT  
+- 🗃️ **Local data storage** with Hive for offline capability  
+- 🌍 **Multi-language support** for a global user base  
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Language:** Dart  
+- **Framework:** Flutter  
+- **Communication:** MQTT (via broker)  
+- **Database:** Hive (local storage)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📱 Use Cases
+
+- Automate lighting and appliances in a smart home  
+- Create custom scenarios (e.g., “Movie Mode”, “Wake Up Routine”)  
+- Schedule device behavior without needing constant user input  
+
+## 📦 Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/MaxNoruzi/smart_home.git
+   cd smart_home
