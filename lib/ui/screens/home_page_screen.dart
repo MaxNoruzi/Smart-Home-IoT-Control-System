@@ -1,10 +1,9 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/devices_screen.dart';
 import 'package:iot_project/ui/screens/scene_screen.dart';
 import 'package:iot_project/ui/screens/user_info_screen.dart';
+import 'package:iot_project/utils/consts.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -27,7 +26,7 @@ class _MyHomePageState extends State<HomePageScreen> {
   @override
   void initState() {
     client = MqttService(
-        broker: "212.23.201.244",
+        broker: baseApiUrl,
         clientId: "sadasdas",
         onConnected: () {},
         onDisconnected: () {});

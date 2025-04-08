@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:iot_project/model/device_model.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
@@ -28,46 +24,6 @@ class Utils {
     Utils.infoBox.put("password", pass);
     Utils.infoBox.put("lastLoginDate", DateTime.now().toIso8601String());
   }
-
-//   static Future<http.Client> createHttpClientWithCertificate() async {
-//     if (sslClient != null) return await Future.value(sslClient);
-//     final SecurityContext context = SecurityContext(withTrustedRoots: true);
-
-//     // Load the certificate
-//     const String pem = """
-// -----BEGIN CERTIFICATE-----
-// MIIDnTCCAoWgAwIBAgIUDJeVZD1MhJhgV5we5JNgmYeARi0wDQYJKoZIhvcNAQEL
-// BQAwaDELMAkGA1UEBhMCSVIxETAPBgNVBAgMCEtob3Jhc2FuMRAwDgYDVQQHDAdN
-// YXNoaGFkMQ8wDQYDVQQKDAZTb2xhbmExDzANBgNVBAsMBnNvbGFuYTESMBAGA1UE
-// AwwJbG9jYWxob3N0MCAXDTI0MDkyNzEwMDczOVoYDzIxMjQwOTAzMTAwNzM5WjBo
-// MQswCQYDVQQGEwJJUjERMA8GA1UECAwIS2hvcmFzYW4xEDAOBgNVBAcMB01hc2ho
-// YWQxDzANBgNVBAoMBlNvbGFuYTEPMA0GA1UECwwGc29sYW5hMRIwEAYDVQQDDAls
-// b2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDFffKjQdL6
-// dO1qXTGprxN2s6tjel4xi9XBzkRquf7HMOopyzH3DzBwyI9v5+GLfd2X31p2PCTz
-// 7smehgREWuNR2LtyGyoUdAy28sOdpq5eTN/2nCDGH97rgwYNrpdJR9BworGi5n3J
-// XaD4L/PptfzBGw5tupHLlOJUWPAQzxb3iZckKI1w/6tvrjraRz23n4gBFi94Ribb
-// B6uaXhFWdr8FeKzzmnwRHMu12+Tf6RPH/4EkDIE7hL/c8XlXVnKu+w6KYMh6p19h
-// DIt39PawYvENi1P+xT4duooB8URaAE2aql38YzImJTAtBwoK/C6Na1/mcG5JdtkB
-// rwJVYVKb+8kXAgMBAAGjPTA7MBoGA1UdEQQTMBGCCWxvY2FsaG9zdIcE1BfJ9DAd
-// BgNVHQ4EFgQUEdH20LqjIVsbfbxc6ZJ4Q2iSIKQwDQYJKoZIhvcNAQELBQADggEB
-// AIHWnBKMMDeArgkwc1fY53/7h83+rlDQVyEVU7uKbipzmh4fO+Ht523i1RXDyv0b
-// H0hWMRpqAebhW47woIALFlrXKGiwakSDfmyrlgHmadkavOxe+8yMIxmKrSAk6X8w
-// 3jc0iF9eUjSVyhXktO2wm0R1/hxix9ynXmCsLj3ozRyVJRJ+7QXxgzD6wS/roRvU
-// 9c2FXX0lkjXATkecJOzQ71gE9s5CSAJJbdsKM0S9Z7rz7kQt6YMmJfRvm7oQ1xzo
-// 3YZTSc0N8fcVZyO0UVGdf4L6ewsbuto2o/HtmZ4M8fVr3s6k3/LdD7N96SSsKoVk
-// DB93Ga9Bl0g17X6VUWPMVYc=
-// -----END CERTIFICATE-----
-// """;
-
-//     context.setTrustedCertificatesBytes(utf8.encode(pem));
-
-//     final httpClient = HttpClient(context: context);
-//     httpClient.badCertificateCallback =
-//         (X509Certificate cert, String host, int port) => true;
-
-//     sslClient = IOClient(httpClient);
-//     return IOClient(httpClient);
-//   }
 
   static Future<bool> requestPermission(
       {required Permission permission}) async {

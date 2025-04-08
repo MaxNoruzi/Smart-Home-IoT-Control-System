@@ -60,9 +60,9 @@ class AppApi {
               title: e.response!.data, errorStatus: ErrorStatus.server));
         }
         if (kDebugMode) {
-          log(e.response!.data + "hi");
-          log("${e.response!.headers}hi2");
-          log("${e.response!.requestOptions}hi3");
+          log(e.response!.data );
+          log("${e.response!.headers}");
+          log("${e.response!.requestOptions}");
         }
         // }
       } else {

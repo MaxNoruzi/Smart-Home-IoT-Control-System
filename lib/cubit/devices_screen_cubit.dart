@@ -17,11 +17,6 @@ part 'devices_screen_state.dart';
 
 class DevicesScreenCubit extends Cubit<DevicesScreenState> {
   DevicesScreenCubit() : super(Loading()) {
-    // client = MqttService(
-    //     broker: "212.23.201.244",
-    //     clientId: "sadasdas",
-    //     onConnected: onConnected,
-    //     onDisconnected: onDisconnected);
     Utils.client.setOnConnected(onConnected);
     Utils.client.setOnDisconnected(onDisconnected);
     fetchDevices();
@@ -99,21 +94,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
 
   void onDisconnected() async {
     if (kDebugMode) log("Disconnected");
-    // emit(Error(
-    //     error: ErrorModel(
-    //         title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
-    //         errorStatus: ErrorStatus.connection),
-    //     onCall: () {
-    //       fetchDevices();
-    //     }));
-    // if (!onceRefreshed) {
-    //   Timer(Duration(milliseconds: 200), () {
-    //     if (!client.isConnected() && !isClosed) {
-    //       onceRefreshed = true;
-    //       client.connect();
-    //     }
-    //   });
-    // } else {
+
     Future.delayed(Duration(milliseconds: 500)).then((value) => emit(Error(
         error: ErrorModel(
             title: "قطع ارتباط با سرور لطفا دوباره تلاش کنید.",
@@ -140,7 +121,7 @@ class DevicesScreenCubit extends Cubit<DevicesScreenState> {
 
   void fetchDevices() async {
     emit(Loading());
-     AppApi.instance.postApi(
+    AppApi.instance.postApi(
       url: "$baseApiUrl/api/login/",
       body: {"Username": Utils.username, "Password": Utils.password},
       onSuccess: (response) {

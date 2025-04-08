@@ -8,6 +8,7 @@ import 'package:iot_project/cubit/devices_screen_cubit.dart';
 import 'package:iot_project/ui/screens/home_page_screen.dart';
 import 'package:iot_project/ui/screens/login_screen.dart';
 import 'package:iot_project/utils/appApi.dart';
+import 'package:iot_project/utils/consts.dart';
 import 'package:iot_project/utils/mqtt_client.dart';
 import 'package:iot_project/utils/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,7 +37,7 @@ void main() async {
     }
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {};
     Utils.client = MqttService(
-        broker: "212.23.201.244",
+        broker: baseApiUrl,
         clientId: "sadasdas",
         onConnected: () {},
         onDisconnected: () {});
